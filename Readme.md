@@ -19,7 +19,7 @@
 
 ## Diagramas de clase cliente-servidor
 
-<figure>
-    <img src="./documentation/client class diagram.png" style="border: 2px solid gray;">
-    <figcaption style="text-align: center">Diagrama de clase cliente</figcaption>
+<figure align="center">
+    <img src="./documentation/client class diagram.png">
+    <figcaption> Diagrama de clase cliente </figcaption>
 </figure>
