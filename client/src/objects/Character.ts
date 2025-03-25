@@ -10,10 +10,10 @@ export class Character extends Phaser.GameObjects.Sprite{
     idle: boolean;
     PI = Math.PI2/2;
 
-    constructor(scene: Scene, texture: string, x: number, y:number, animations: CharacterAnimations, direction: Math.Vector2, idle: boolean, fishing: boolean){
+    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, idle: boolean, fishing: boolean, animations: CharacterAnimations,){
         super(scene, x, y, texture)
-        this.animations = animations,
-        this.direction = direction,
+        this.animations = animations
+        this.direction = direction
         this.idle = idle
         this.fishing = fishing
 

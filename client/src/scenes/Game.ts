@@ -3,6 +3,7 @@ import { AssetsLoader } from "../utils/AssetsLoader";
 import { GHOST, MAP } from "../utils/AssetsGlobals";
 import { Character } from "../objects/Character";
 import { CharacterControls } from "../controls/CharacterControls";
+import { Ghost } from "../objects/Ghost";
 
 export class Game extends Scene {
     character: Character|undefined
@@ -18,12 +19,7 @@ export class Game extends Scene {
 
     create() {
         this.generateMap();
-        this.character = new Character(this, GHOST.ghostIdle, 100, 100, {idle: {
-            front: "ghostIdleFront", 
-            right: "ghostIdleRight",
-            left: "ghostIdleLeft",
-            back: "ghostIdleBack"
-        }}, new Math.Vector2(0,1), true, false)
+        this.character = new Ghost(this, GHOST.ghostIdle, 100, 100, new Math.Vector2(0,1), true, false)
 
         this.cameras.main.zoom = 4;
         this.cameras.main.centerOn(this.character.x, this.character.y)
