@@ -1,8 +1,11 @@
-import { Scene } from "phaser";
+import { Math, Scene } from "phaser";
 import { AssetsLoader } from "../utils/AssetsLoader";
-import { MAP } from "../utils/AssetsGlobals";
+import { GHOST, MAP } from "../utils/AssetsGlobals";
+import { Character } from "../objects/Character";
+import { CharacterControls } from "../controls/CharacterControls";
 
 export class Game extends Scene {
+    character: Character|undefined
     constructor() {
         super("Game");
     }
@@ -10,10 +13,27 @@ export class Game extends Scene {
     preload() {
         this.load.setPath("assets");
         AssetsLoader.loadMap(this);
+        AssetsLoader.loadGhost(this)
     }
 
     create() {
         this.generateMap();
+        this.character = new Character(this, GHOST.ghostIdle, 100, 100, {idle: {
+            front: "ghostIdleFront", 
+            right: "ghostIdleRight",
+            left: "ghostIdleLeft",
+            back: "ghostIdleBack"
+        }}, new Math.Vector2(0,1), true, false)
+
+        this.cameras.main.zoom = 4;
+        this.cameras.main.centerOn(this.character.x, this.character.y)
+        this.cameras.main.startFollow(this.character)
+
+        CharacterControls.generateCharacterMoveControl(this.input, this.character)
+    }
+
+    update(time:number, delta:number){
+        this.character?.update(delta)
     }
 
     generateMap() {
