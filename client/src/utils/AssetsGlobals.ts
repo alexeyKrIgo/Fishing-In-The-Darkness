@@ -1,5 +1,9 @@
 export const GHOST = {
     ghostIdle: "ghostIdle",
+    castRod: "ghost cast rod",
+    fishingIdle: "ghost fishing idle",
+    bait: "ghost fishing bait",
+    catchFish: "ghost catch fish"
 };
 
 export const MAP = {
@@ -11,3 +15,10 @@ export const MAP = {
         tileset: "mapset",
     },
 };
+
+export const BASICROD = {
+    cast: "basic rod cast",
+    idle: "basic rod idle",
+    bait: "basic rod bait",
+    catch: "basic rod catch"
+}

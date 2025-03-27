@@ -12,7 +12,7 @@ import { Game, Scale, Types } from "phaser";
             createContainer: true,
         },
         fps: {
-            target: 60,
+            target: 30,
         },
         parent: "game-container",
         scale: {

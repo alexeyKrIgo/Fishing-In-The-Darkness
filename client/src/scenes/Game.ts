@@ -4,9 +4,10 @@ import { GHOST, MAP } from "../utils/AssetsGlobals";
 import { Character } from "../objects/Character";
 import { CharacterControls } from "../controls/CharacterControls";
 import { Ghost } from "../objects/Ghost";
+import { UI } from "./UI";
 
 export class Game extends Scene {
-    character: Character|undefined
+    character: Character
     constructor() {
         super("Game");
     }
@@ -15,6 +16,7 @@ export class Game extends Scene {
         this.load.setPath("assets");
         AssetsLoader.loadMap(this);
         AssetsLoader.loadGhost(this)
+        AssetsLoader.loadBasicRod(this)
     }
 
     create() {
@@ -24,8 +26,10 @@ export class Game extends Scene {
         this.cameras.main.zoom = 4;
         this.cameras.main.centerOn(this.character.x, this.character.y)
         this.cameras.main.startFollow(this.character)
+        this.cameras.main.setBounds(0,0, 560, 240)
 
         CharacterControls.generateCharacterMoveControl(this.input, this.character)
+        this.game.scene.add("UI", new UI(), true);
     }
 
     update(time:number, delta:number){
