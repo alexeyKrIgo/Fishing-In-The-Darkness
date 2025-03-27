@@ -35,7 +35,8 @@ export class CharacterControls{
 
     static update(character: Character){
         if(Input.Keyboard.JustDown(this.keys.F!)){
-            character.fish()
+            if(!character.fishing)
+                character.fish()
         }
     }
 }

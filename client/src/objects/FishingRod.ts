@@ -1,7 +1,6 @@
 import { Scene } from "phaser";
 import { FishingRodAnimations } from "../interfaces/Animations";
 import { Animator } from "../utils/Animator";
-import { BASICROD } from "../utils/AssetsGlobals";
 import { RodData } from "../interfaces/FishingRod";
 
 export class FishingRod extends Phaser.GameObjects.Sprite{

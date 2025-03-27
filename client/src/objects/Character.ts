@@ -1,13 +1,13 @@
 import { Math, Scene} from "phaser";
-import { CharacterAnimations, FishingRodAnimations } from "../interfaces/Animations";
+import { CharacterAnimations} from "../interfaces/Animations";
 import { Animator } from "../utils/Animator";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
-import { BASICROD, GHOST } from "../utils/AssetsGlobals";
+import { GHOST } from "../utils/AssetsGlobals";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: CharacterAnimations;
-    speed = 0.05; 
+    speed = 0.035; 
     direction: Math.Vector2;
     fishing: boolean;
     idle: boolean;
@@ -105,5 +105,10 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.fishing = true
         this.play({key: this.animations.cast})
         this.fishingRod.play({key: this.fishingRod.animations.cast})
+    }
+
+    tryCatchFish(){
+        this.play({key: this.animations.bait, repeat: -1})
+        this.fishingRod.play({key: this.fishingRod.animations.bait, repeat: -1})
     }
 }

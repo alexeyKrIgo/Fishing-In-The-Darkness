@@ -5,6 +5,7 @@ import { Character } from "../objects/Character";
 import { CharacterControls } from "../controls/CharacterControls";
 import { Ghost } from "../objects/Ghost";
 import { UI } from "./UI";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class Game extends Scene {
     character: Character
