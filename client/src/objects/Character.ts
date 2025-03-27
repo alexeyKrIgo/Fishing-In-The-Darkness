@@ -37,7 +37,7 @@ export class Character extends Phaser.GameObjects.Sprite{
 
         //Fishing animations generation
         Animator.generateFishingAnimations(scene, this.animations.cast, GHOST.castRod, 0, 8, this.fishingRod.animationSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.fishingIdle, GHOST.fishingIdle, 0, 7, this.fishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.fishingIdle, GHOST.fishingIdle, 0, 7, this.fishingRod.animationIdleSpeed)
         Animator.generateFishingAnimations(scene, this.animations.bait, GHOST.bait, 0, 7, this.fishingRod.animationSpeed)
         Animator.generateFishingAnimations(scene, this.animations.catch, GHOST.catchFish, 0, 8, this.fishingRod.animationSpeed)
     }
@@ -53,10 +53,13 @@ export class Character extends Phaser.GameObjects.Sprite{
             // this.y += this.speed*this.direction.y*delta/1000
         }
         if(!this.fishing)
-            this.updateAnimation([this.animations.idle.front, this.animations.idle.left, this.animations.idle.back, this.animations.idle.right], -1, 0)
+            this.updateWalkingAnimation([this.animations.idle.front, this.animations.idle.left, this.animations.idle.back, this.animations.idle.right], -1, 0)
+        else{
+            this.updateFishingAnimation()
+        }
     }
 
-    updateAnimation(animations: Array<string>, repeat: number, startFrame: number){
+    updateWalkingAnimation(animations: Array<string>, repeat: number, startFrame: number){
         if(this.direction.angle() >= this.PI/4 && this.direction.angle() < 3*this.PI/4){
             // Checks if animation is different of which is being played or the animation of "attack" has finished
             // but the attack button is still being pressed
@@ -87,6 +90,15 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.idle = false;
         const direction = new Math.Vector2(vector.x - this.getCenter().x, vector.y - this.getCenter().y);
         this.direction = direction.normalize();
+    }
+
+    updateFishingAnimation(){
+        if(!this.anims.isPlaying){
+            if(this.anims.getName() === this.animations.cast){
+                this.play({key: this.animations.fishingIdle, repeat: -1})
+                this.fishingRod.play({key: this.fishingRod.animations.idle, repeat: -1})
+            }
+        }
     }
 
     fish(){
