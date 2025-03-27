@@ -1,3 +1,5 @@
+import { RodData } from "../interfaces/FishingRod";
+
 export const GHOST = {
     ghostIdle: "ghostIdle",
     castRod: "ghost cast rod",
@@ -16,7 +18,7 @@ export const MAP = {
     },
 };
 
-export const BASICROD = {
+export const BASICROD:RodData = {
     cast: "basic rod cast",
     idle: "basic rod idle",
     bait: "basic rod bait",

@@ -1,6 +1,9 @@
 import { Math, Scene} from "phaser";
-import { CharacterAnimations } from "../interfaces/Animations";
+import { CharacterAnimations, FishingRodAnimations } from "../interfaces/Animations";
 import { Animator } from "../utils/Animator";
+import { FishingRod } from "./FishingRod";
+import { RodData } from "../interfaces/FishingRod";
+import { BASICROD, GHOST } from "../utils/AssetsGlobals";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: CharacterAnimations;
@@ -9,14 +12,18 @@ export class Character extends Phaser.GameObjects.Sprite{
     fishing: boolean;
     idle: boolean;
     PI = Math.PI2/2;
+    fishingRod: FishingRod
 
-    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, idle: boolean, fishing: boolean, animations: CharacterAnimations,){
+    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, idle: boolean, fishing: boolean, animations: CharacterAnimations,
+        rodData: RodData
+    ){
         super(scene, x, y, texture)
         this.animations = animations
         this.direction = direction
         this.idle = idle
         this.fishing = fishing
 
+        //Basic direction animations generation
         Animator.generateCharacterAnimations(scene, this.animations.idle.front, texture, 0, 7, 8)
         Animator.generateCharacterAnimations(scene, this.animations.idle.right, texture, 8, 15, 8)
         Animator.generateCharacterAnimations(scene, this.animations.idle.left, texture, 16, 23, 8)
@@ -25,17 +32,28 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.alpha = 1
 
         scene.add.existing(this)
+
+        this.fishingRod = new FishingRod(scene, rodData.cast, x, y, rodData)
+
+        //Fishing animations generation
+        Animator.generateFishingAnimations(scene, this.animations.cast, GHOST.castRod, 0, 8, this.fishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.fishingIdle, GHOST.fishingIdle, 0, 7, this.fishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.bait, GHOST.bait, 0, 7, this.fishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.catch, GHOST.catchFish, 0, 8, this.fishingRod.animationSpeed)
     }
 
     update(delta: number){
-        if(!this.idle){
+        if(!this.idle && !this.fishing){
             this.x += this.speed*this.direction.x*delta
             this.y += this.speed*this.direction.y*delta
+            this.fishingRod.x = this.x
+            this.fishingRod.y = this.y
             // this.speed = 40;
             // this.x += this.speed*this.direction.x*delta/1000
             // this.y += this.speed*this.direction.y*delta/1000
         }
-        this.updateAnimation([this.animations.idle.front, this.animations.idle.left, this.animations.idle.back, this.animations.idle.right], -1, 0)
+        if(!this.fishing)
+            this.updateAnimation([this.animations.idle.front, this.animations.idle.left, this.animations.idle.back, this.animations.idle.right], -1, 0)
     }
 
     updateAnimation(animations: Array<string>, repeat: number, startFrame: number){
@@ -69,5 +87,11 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.idle = false;
         const direction = new Math.Vector2(vector.x - this.getCenter().x, vector.y - this.getCenter().y);
         this.direction = direction.normalize();
+    }
+
+    fish(){
+        this.fishing = true
+        this.play({key: this.animations.cast})
+        this.fishingRod.play({key: this.fishingRod.animations.cast})
     }
 }

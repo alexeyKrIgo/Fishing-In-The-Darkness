@@ -29,10 +29,12 @@ export class Game extends Scene {
         this.cameras.main.setBounds(0,0, 560, 240)
 
         CharacterControls.generateCharacterMoveControl(this.input, this.character)
+        CharacterControls.generateKeys(this.input)
         this.game.scene.add("UI", new UI(), true);
     }
 
     update(time:number, delta:number){
+        CharacterControls.update(this.character)
         this.character?.update(delta)
     }
 

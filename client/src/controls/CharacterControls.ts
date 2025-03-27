@@ -3,6 +3,15 @@ import { Character } from "../objects/Character";
 
 export class CharacterControls{
     static mouseLeft = false;
+    static keys: {
+        F: Input.Keyboard.Key|null
+    } = {
+        F: null
+    }
+
+    static generateKeys(input: Input.InputPlugin){
+        this.keys.F = input.keyboard!.addKey(Input.Keyboard.KeyCodes.F)
+    }
 
     static generateCharacterMoveControl(input: Input.InputPlugin, character:Character){
         input.on("pointerdown", (p:Input.Pointer) => {
@@ -22,5 +31,11 @@ export class CharacterControls{
             this.mouseLeft = false
             character.idle = true
         })
+    }
+
+    static update(character: Character){
+        if(Input.Keyboard.JustDown(this.keys.F!)){
+            character.fish()
+        }
     }
 }

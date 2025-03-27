@@ -18,4 +18,17 @@ export class Animator {
             frameRate: frameRate,
         });
     }
+
+    static generateFishingAnimations(scene: Scene, name: string, texture: string, start:number, end: number, speed: number){
+        scene.anims.create({
+            key: name,
+            frames: scene.anims.generateFrameNumbers(texture, {
+                start: start,
+                end: end
+            }),
+            frameRate: speed,
+            showOnStart: true,
+            hideOnComplete: true,
+        })
+    }
 }
