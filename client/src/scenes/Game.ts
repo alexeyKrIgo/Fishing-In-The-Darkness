@@ -9,6 +9,7 @@ import { GameNetManager } from "../managers/GameNetManager";
 
 export class Game extends Scene {
     character: Character
+    seaLimit: number
     constructor() {
         super("Game");
     }
@@ -37,7 +38,7 @@ export class Game extends Scene {
 
     update(time:number, delta:number){
         CharacterControls.update(this.character)
-        this.character?.update(delta)
+        this.character?.update(delta, this.seaLimit)
     }
 
     generateMap() {
@@ -49,5 +50,6 @@ export class Game extends Scene {
 
         map.createLayer(MAP.beach.ground, tiles, 0, 0);
         map.createLayer(MAP.beach.decoration, tiles, 0, 0);
+        this.seaLimit = map.tileWidth * 11
     }
 }

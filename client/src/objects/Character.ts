@@ -41,13 +41,15 @@ export class Character extends Phaser.GameObjects.Sprite{
         Animator.generateFishingAnimations(scene, this.animations.catch, GHOST.catchFish, 0, 8, this.fishingRod.animationSpeed)
     }
 
-    update(delta: number){
-        console.log(this.anims.getName())
+    update(delta: number, seaLimit: number){
         if(!this.states.idle && !this.states.fishing){
-            this.x += this.speed*this.direction.x*delta
-            this.y += this.speed*this.direction.y*delta
-            this.fishingRod.x = this.x
-            this.fishingRod.y = this.y
+            console.log(seaLimit)
+            if(this.y + this.speed*this.direction.y*delta < seaLimit){
+                this.x += this.speed*this.direction.x*delta
+                this.y += this.speed*this.direction.y*delta
+                this.fishingRod.x = this.x
+                this.fishingRod.y = this.y
+            }
             // this.speed = 40;
             // this.x += this.speed*this.direction.x*delta/1000
             // this.y += this.speed*this.direction.y*delta/1000
