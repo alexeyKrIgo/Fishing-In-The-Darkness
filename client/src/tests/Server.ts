@@ -11,10 +11,10 @@ export class Server{
 
     fish(character: Character){
         this.fishingInterval = setInterval(()=>{
-            if(this.getRandomInt(1,100) <= 20){
+            if(this.getRandomInt(1,100) <= 10){
                 character.tryCatchFish()
                 clearInterval(this.fishingInterval)
             }
-        })
+        }, 350)
     }
 }

@@ -1,5 +1,6 @@
 import { Input, Math } from "phaser";
 import { Character } from "../objects/Character";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class CharacterControls{
     static mouseLeft = false;
@@ -35,8 +36,10 @@ export class CharacterControls{
 
     static update(character: Character){
         if(Input.Keyboard.JustDown(this.keys.F!)){
-            if(!character.fishing)
+            if(!character.fishing){
                 character.fish()
+                GameNetManager.sendFish()
+            }
         }
     }
 }

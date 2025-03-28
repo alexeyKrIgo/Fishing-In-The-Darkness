@@ -32,6 +32,7 @@ export class Game extends Scene {
         CharacterControls.generateCharacterMoveControl(this.input, this.character)
         CharacterControls.generateKeys(this.input)
         this.game.scene.add("UI", new UI(), true);
+        GameNetManager.scene = this
     }
 
     update(time:number, delta:number){

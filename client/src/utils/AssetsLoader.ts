@@ -33,7 +33,7 @@ export class AssetsLoader {
     static loadBasicRod(scene: Scene) {
         scene.load.spritesheet(BASICROD.cast, `${this.basicRodURL}/fishing rod cast.png`, {frameWidth: 128, frameHeight: 128})
         scene.load.spritesheet(BASICROD.idle, `${this.basicRodURL}/fishing rod idle.png`, {frameWidth: 128, frameHeight: 128})
-        scene.load.spritesheet(BASICROD.bait, `${this.basicRodURL}/fishing rod cast.png`, {frameWidth: 128, frameHeight: 128})
+        scene.load.spritesheet(BASICROD.bait, `${this.basicRodURL}/fishing rod baited fish.png`, {frameWidth: 128, frameHeight: 128})
         scene.load.spritesheet(BASICROD.catch, `${this.basicRodURL}/fishing rod catch fish.png`, {frameWidth: 128, frameHeight: 128})
     }
 }
