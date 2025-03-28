@@ -6,6 +6,10 @@ export class GameNetManager{
     static scene: Game
 
     static sendFish(){
-        this.server.fish(this.scene!.character)
+        this.server.fish()
+    }
+
+    static receivedBait(){
+        this.scene!.character.tryCatchFish()
     }
 }

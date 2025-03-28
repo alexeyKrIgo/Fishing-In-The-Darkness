@@ -30,15 +30,18 @@ export class CharacterControls{
 
         input.on("pointerup", ()=>{
             this.mouseLeft = false
-            character.idle = true
+            character.states.idle = true
         })
     }
 
     static update(character: Character){
         if(Input.Keyboard.JustDown(this.keys.F!)){
-            if(!character.fishing){
+            if(!character.states.fishing){
                 character.fish()
                 GameNetManager.sendFish()
+            }
+            else if(character.states.tryingCatchFish){
+                character.catchFish()
             }
         }
     }

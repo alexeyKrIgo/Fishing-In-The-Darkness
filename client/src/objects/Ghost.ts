@@ -1,10 +1,11 @@
 import { Math, Scene } from "phaser";
 import { Character } from "./Character";
 import { BASICROD, GHOST } from "../utils/AssetsGlobals";
+import { CharacterStates } from "../interfaces/CharacterStates";
 
 export class Ghost extends Character{
-    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, idle: boolean, fishing: boolean){
-        super(scene, texture, x, y, direction, idle, fishing, {idle: {
+    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: CharacterStates){
+        super(scene, texture, x, y, direction, states, {idle: {
             front: "ghostIdleFront", 
             right: "ghostIdleRight",
             left: "ghostIdleLeft",

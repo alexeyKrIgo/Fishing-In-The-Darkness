@@ -1,4 +1,4 @@
-import { Character } from "../objects/Character";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class Server{
     fishingInterval: number
@@ -9,10 +9,10 @@ export class Server{
         return Math.floor(Math.random() * (max - min + 1)) + min;
     }
 
-    fish(character: Character){
+    fish(){
         this.fishingInterval = setInterval(()=>{
             if(this.getRandomInt(1,100) <= 10){
-                character.tryCatchFish()
+                GameNetManager.receivedBait()
                 clearInterval(this.fishingInterval)
             }
         }, 350)

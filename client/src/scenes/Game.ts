@@ -22,7 +22,7 @@ export class Game extends Scene {
 
     create() {
         this.generateMap();
-        this.character = new Ghost(this, GHOST.ghostIdle, 100, 100, new Math.Vector2(0,1), true, false)
+        this.character = new Ghost(this, GHOST.ghostIdle, 100, 100, new Math.Vector2(0,1), {idle: true, fishing: false, tryingCatchFish: false})
 
         this.cameras.main.zoom = 4;
         this.cameras.main.centerOn(this.character.x, this.character.y)
