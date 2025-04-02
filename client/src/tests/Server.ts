@@ -17,4 +17,8 @@ export class Server{
             }
         }, 350)
     }
+
+    sendFish(){
+        GameNetManager.receivedFish({assetsId: 0})
+    }
 }

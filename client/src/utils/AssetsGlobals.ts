@@ -1,5 +1,9 @@
 import { RodData } from "../interfaces/FishingRod";
 
+export const GENERAL = {
+    loot: "loot"
+}
+
 export const GHOST = {
     ghostIdle: "ghostIdle",
     castRod: "ghost cast rod",

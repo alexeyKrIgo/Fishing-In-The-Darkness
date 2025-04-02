@@ -1,6 +1,7 @@
 import { Input, Math } from "phaser";
 import { Character } from "../objects/Character";
 import { GameNetManager } from "../managers/GameNetManager";
+import { Server } from "../tests/Server";
 
 export class CharacterControls{
     static mouseLeft = false;
@@ -41,6 +42,7 @@ export class CharacterControls{
                 GameNetManager.sendFish()
             }
             else if(character.states.tryingCatchFish){
+                GameNetManager.server.sendFish()
                 character.catchFish()
             }
         }

@@ -1,10 +1,10 @@
 import { Scene } from "phaser";
-import { FishingRodAnimations } from "../interfaces/Animations";
+import { IFishingRodAnimations } from "../interfaces/Animations";
 import { Animator } from "../utils/Animator";
 import { RodData } from "../interfaces/FishingRod";
 
 export class FishingRod extends Phaser.GameObjects.Sprite{
-    animations: FishingRodAnimations
+    animations: IFishingRodAnimations
     animationSpeed = 10
     animationIdleSpeed = 8
 

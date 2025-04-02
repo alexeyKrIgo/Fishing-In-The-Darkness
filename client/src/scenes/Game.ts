@@ -10,12 +10,15 @@ import { GameNetManager } from "../managers/GameNetManager";
 export class Game extends Scene {
     character: Character
     seaLimit: number
+    test = true
+    testTween: Phaser.Tweens.Tween
     constructor() {
         super("Game");
     }
 
     preload() {
         this.load.setPath("assets");
+        AssetsLoader.loadLoot(this)
         AssetsLoader.loadMap(this);
         AssetsLoader.loadGhost(this)
         AssetsLoader.loadBasicRod(this)
@@ -34,6 +37,10 @@ export class Game extends Scene {
         CharacterControls.generateKeys(this.input)
         this.game.scene.add("UI", new UI(), true);
         GameNetManager.scene = this
+        /*this.testTween = this.tweens.add({targets: this.character, props: {
+            scale: {value: 2, duration: 3000}
+        }})*/
+        
     }
 
     update(time:number, delta:number){

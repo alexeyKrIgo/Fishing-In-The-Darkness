@@ -1,20 +1,20 @@
 import { Math, Scene} from "phaser";
-import { CharacterAnimations} from "../interfaces/Animations";
-import { CharacterStates } from "../interfaces/CharacterStates";
+import { ICharacterAnimations} from "../interfaces/Animations";
+import { ICharacterStates } from "../interfaces/CharacterStates";
 import { Animator } from "../utils/Animator";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
 import { GHOST } from "../utils/AssetsGlobals";
 
 export class Character extends Phaser.GameObjects.Sprite{
-    animations: CharacterAnimations;
+    animations: ICharacterAnimations;
     speed = 0.035; 
     direction: Math.Vector2;
-    states: CharacterStates
+    states: ICharacterStates
     PI = Math.PI2/2;
     fishingRod: FishingRod
 
-    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: CharacterStates, animations: CharacterAnimations,
+    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates, animations: ICharacterAnimations,
         rodData: RodData
     ){
         super(scene, x, y, texture)

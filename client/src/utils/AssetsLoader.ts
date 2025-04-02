@@ -1,10 +1,15 @@
 import { Scene } from "phaser";
-import { BASICROD, GHOST, MAP } from "./AssetsGlobals";
+import { BASICROD, GENERAL, GHOST, MAP } from "./AssetsGlobals";
 
 export class AssetsLoader {
+    private static lootURL = "loot"
     private static ghostURL = "characters/basic-ghost";
     private static mapURL = "map";
     private static basicRodURL = "fishing-rods/basic-rod"
+
+    static loadLoot(scene: Scene){
+        scene.load.spritesheet(GENERAL.loot, `${this.lootURL}/loot.png`, {frameWidth: 32, frameHeight: 32})
+    }
 
     static loadGhost(scene: Scene) {
         scene.load.spritesheet(
