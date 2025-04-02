@@ -8,7 +8,7 @@ import { UI } from "./UI";
 import { GameNetManager } from "../managers/GameNetManager";
 
 export class Game extends Scene {
-    character: Character
+    characters: Map<string, Character>
     seaLimit: number
     test = true
     testTween: Phaser.Tweens.Tween
@@ -24,28 +24,32 @@ export class Game extends Scene {
         AssetsLoader.loadBasicRod(this)
     }
 
-    create() {
+    async create() {
         this.generateMap();
-        this.character = new Ghost(this, GHOST.ghostIdle, 100, 100, new Math.Vector2(0,1), {idle: true, fishing: false, tryingCatchFish: false})
-
-        this.cameras.main.zoom = 4;
-        this.cameras.main.centerOn(this.character.x, this.character.y)
-        this.cameras.main.startFollow(this.character)
-        this.cameras.main.setBounds(0,0, 560, 240)
-
-        CharacterControls.generateCharacterMoveControl(this.input, this.character)
-        CharacterControls.generateKeys(this.input)
-        this.game.scene.add("UI", new UI(), true);
+        this.characters = new Map<string, Character>()
         GameNetManager.scene = this
+        await GameNetManager.connect()
         /*this.testTween = this.tweens.add({targets: this.character, props: {
             scale: {value: 2, duration: 3000}
         }})*/
         
     }
 
+    createPlayer(character: Character){
+        this.cameras.main.zoom = 4;
+        this.cameras.main.centerOn(character.x, character.y)
+        this.cameras.main.startFollow(character)
+        this.cameras.main.setBounds(0,0, 560, 240)
+
+        CharacterControls.generateCharacterMoveControl(this.input, character)
+        CharacterControls.generateKeys(this.input)
+        this.game.scene.add("UI", new UI(), true);
+    }
+
     update(time:number, delta:number){
-        CharacterControls.update(this.character)
-        this.character?.update(delta, this.seaLimit)
+        if(GameNetManager.mainPlayer.character)
+            CharacterControls.update(GameNetManager.mainPlayer.character)
+        this.characters.forEach(c => c.update(delta, this.seaLimit))
     }
 
     generateMap() {

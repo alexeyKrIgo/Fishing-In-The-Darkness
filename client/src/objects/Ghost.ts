@@ -1,7 +1,7 @@
 import { Math, Scene } from "phaser";
 import { Character } from "./Character";
 import { BASICROD, GHOST } from "../utils/AssetsGlobals";
-import { ICharacterStates } from "../interfaces/CharacterStates";
+import { ICharacterStates } from "../interfaces/Character";
 
 export class Ghost extends Character{
     constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates){

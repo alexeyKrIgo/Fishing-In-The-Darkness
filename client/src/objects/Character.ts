@@ -1,6 +1,6 @@
 import { Math, Scene} from "phaser";
 import { ICharacterAnimations} from "../interfaces/Animations";
-import { ICharacterStates } from "../interfaces/CharacterStates";
+import { ICharacterStates } from "../interfaces/Character";
 import { Animator } from "../utils/Animator";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
@@ -124,5 +124,10 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.states.tryingCatchFish = false
         this.play({key: this.animations.catch})
         this.fishingRod.play({key: this.fishingRod.animations.catch})
+    }
+
+    destroyCharacter(){
+        this.fishingRod.destroy()
+        this.destroy()
     }
 }
