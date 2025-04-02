@@ -4,43 +4,35 @@ import { Player } from "../interfaces/Player";
 import { World } from "../worlds/World";
 import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
+import { Character } from "../objects/Character";
 
 export class MyRoom extends Room<MyRoomState> {
-  maxClients = 4;
-  state = new MyRoomState();
-  players: Player[]
-  world: World
+    maxClients = 4;
+    state = new MyRoomState();
+    players: Player[]
+    world: World
 
-  onCreate (options: any) {
-    this.autoDispose = false;
-    this.world = new World()
-    this.onMessage("type", (client, message) => {
-      //
-      // handle "type" message
-      //
-    });
-  }
+    onCreate(options: any) {
+        this.autoDispose = false;
+        this.world = new World()
 
-  onJoin (client: Client, options: any) {
-    const characterSchema = new SCharacter();
-    characterSchema.position.x = getRandomInt(100,200)
-    characterSchema.position.y = getRandomInt(100,120)
-    characterSchema.direction.x = 0
-    characterSchema.direction.y = 1
-    characterSchema.states.fishing=false;
-    characterSchema.states.idle = true;
-    characterSchema.states.tryingCatchFish = false
-    this.state.characters.set(client.sessionId, characterSchema)
-    console.log(client.sessionId, "joined!");
-  }
+        this.setSimulationInterval((delta)=>{
+            this
+        })
+    }
 
-  onLeave (client: Client, consented: boolean) {
-    this.state.characters.delete(client.sessionId)
-    console.log(client.sessionId, "left!");
-  }
+    onJoin(client: Client, options: any) {
+        //this.generateCharacter(client.sessionId)
+        console.log(client.sessionId, "joined!");
+        new Character(this, client.sessionId)
+    }
 
-  onDispose() {
-    console.log("room", this.roomId, "disposing...");
-  }
+    onLeave(client: Client, consented: boolean) {
+        this.state.characters.delete(client.sessionId)
+        console.log(client.sessionId, "left!");
+    }
 
+    onDispose() {
+        console.log("room", this.roomId, "disposing...");
+    }
 }

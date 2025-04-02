@@ -9,6 +9,7 @@ import { Player } from "../classes/Player";
 import { GHOST } from "../utils/AssetsGlobals";
 import { Math, Scenes } from "phaser";
 import { Ghost } from "../objects/Ghost";
+import { Vector2 } from "../interfaces/Vector2";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -16,6 +17,7 @@ export class GameNetManager{
     static room: Room<MyRoomState>
     static scene: Game
     static colyseusSDK = new Client("http://localhost:2567");
+    static blocked = false
 
     static async connect(){
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
@@ -23,7 +25,7 @@ export class GameNetManager{
 
         //Adds a new character to the game scene
         $(this.room.state).characters.onAdd((character:SCharacter, sessionId:string)=>{
-            let characterObject = new Ghost(this.scene, GHOST.ghostIdle, character.position.x, character.position.y,
+            let characterObject = new Ghost(this.scene, GHOST.ghostIdle, character.x, character.y,
                 new Math.Vector2(character.direction.x, character.direction.y), character.states
             )
             //Creates main player
@@ -33,6 +35,14 @@ export class GameNetManager{
                 this.scene.createPlayer(characterObject)
             }
             this.scene.characters.set(sessionId, characterObject)
+
+            $(character).listen("x", (x)=>{
+                characterObject.x = x;
+            })
+
+            $(character).listen("y", (y)=>{
+                characterObject.y = y;
+            })
         })
 
         //Destroys a character if player disconects
@@ -43,6 +53,26 @@ export class GameNetManager{
                 character?.destroyCharacter()
             })
         })
+        
+        this.setCommands()
+    }
+
+    private static setCommands(){
+        this.room.onMessage("wk", (data: {id:string, direction: Vector2})=>{
+            this.receiveWalk(data.id, data.direction)
+        })
+    }
+
+    private static receiveWalk(id: string, direction: Vector2){
+        this.scene.characters.get(id)!.direction = new Math.Vector2(direction.x, direction.y)
+    }
+
+    static sendWalk(direction: Vector2){
+        if(!this.blocked){
+            this.room.send("wk", direction);
+            this.blocked = true;
+            this.scene.time.delayedCall(33, ()=>this.blocked=false)
+        }
     }
 
     static sendFish(){

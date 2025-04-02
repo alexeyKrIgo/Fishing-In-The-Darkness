@@ -1,0 +1,67 @@
+import { ICharacterStates } from "../interfaces/Character";
+import { Vector2 } from "../interfaces/Vector2";
+import { MyRoom } from "../rooms/MyRoom";
+import { SCharacter } from "../schemas/characters/SCharacter";
+import { getRandomInt } from "../utils/Maths";
+
+export class Character{
+    schema: SCharacter
+    x: number
+    y: number
+    direction: Vector2
+    states: ICharacterStates
+    speed = 0.035; 
+
+    constructor(room: MyRoom, sessionId: string){
+
+        //Sets position
+        this.x = getRandomInt(100, 200)
+        this.y = getRandomInt(100, 120)
+
+        //Sets direction
+        this.direction.x = 0
+        this.direction.y = 1
+
+        //Sets states
+        this.states.idle = true
+        this.states.fishing = false
+        this.states.tryingCatchFish = false
+
+        //Generates schema
+        this.generateSchema(sessionId, room)
+    }
+
+    generateSchema(sessionId: string, room: MyRoom){
+        const characterSchema = new SCharacter();
+
+        //Sets schema position
+        characterSchema.x = this.x
+        characterSchema.y = this.y
+
+        //Sets schema direction
+        characterSchema.direction.x = this.direction.x
+        characterSchema.direction.y = this.direction.y
+
+        //Sets schema state
+        characterSchema.states.fishing = false;
+        characterSchema.states.idle = true;
+        characterSchema.states.tryingCatchFish = false
+
+        //Asigns schema to object and room
+        this.schema = characterSchema
+        room.state.characters.set(sessionId, characterSchema)
+    }
+
+    update(delta: number, seaLimit: number){
+        if(!this.states.idle && !this.states.fishing){
+            console.log(seaLimit)
+            if(this.y + this.speed*this.direction.y*delta < seaLimit){
+                this.x += this.speed*this.direction.x*delta
+                this.y += this.speed*this.direction.y*delta
+            }
+            // this.speed = 40;
+            // this.x += this.speed*this.direction.x*delta/1000
+            // this.y += this.speed*this.direction.y*delta/1000
+        }
+    }
+}
