@@ -25,6 +25,7 @@ export class Game extends Scene {
     }
 
     async create() {
+        Ghost.generateAnimations(this, GHOST.ghostIdle)
         this.generateMap();
         this.characters = new Map<string, Character>()
         GameNetManager.scene = this

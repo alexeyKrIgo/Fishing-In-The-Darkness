@@ -5,8 +5,8 @@ import { RodData } from "../interfaces/FishingRod";
 
 export class FishingRod extends Phaser.GameObjects.Sprite{
     animations: IFishingRodAnimations
-    animationSpeed = 10
-    animationIdleSpeed = 8
+    static animationSpeed = 10
+    static animationIdleSpeed = 8
 
     constructor(scene: Scene, texture: string, x: number, y:number, rodData: RodData){
         super(scene, x, y, texture)
@@ -20,10 +20,10 @@ export class FishingRod extends Phaser.GameObjects.Sprite{
 
         this.visible = false;
 
-        Animator.generateFishingAnimations(scene, this.animations.cast, rodData.cast, 0, 8, this.animationSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.idle, rodData.idle, 0, 7, this.animationIdleSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.bait, rodData.bait, 0, 7, this.animationSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.catch, rodData.catch, 0, 8, this.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.cast, rodData.cast, 0, 8, FishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.idle, rodData.idle, 0, 7, FishingRod.animationIdleSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.bait, rodData.bait, 0, 7, FishingRod.animationSpeed)
+        Animator.generateFishingAnimations(scene, this.animations.catch, rodData.catch, 0, 8, FishingRod.animationSpeed)
 
         scene.add.existing(this)
     }

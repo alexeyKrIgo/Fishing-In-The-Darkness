@@ -1,10 +1,8 @@
 import { Math, Scene} from "phaser";
 import { ICharacterAnimations} from "../interfaces/Animations";
 import { ICharacterStates } from "../interfaces/Character";
-import { Animator } from "../utils/Animator";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
-import { GHOST } from "../utils/AssetsGlobals";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: ICharacterAnimations;
@@ -21,24 +19,12 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.animations = animations
         this.direction = direction
         this.states = states
-
-        //Basic direction animations generation
-        Animator.generateCharacterAnimations(scene, this.animations.idle.front, texture, 0, 7, 8)
-        Animator.generateCharacterAnimations(scene, this.animations.idle.right, texture, 8, 15, 8)
-        Animator.generateCharacterAnimations(scene, this.animations.idle.left, texture, 16, 23, 8)
-        Animator.generateCharacterAnimations(scene, this.animations.idle.back, texture, 24, 31, 8)
         
         this.alpha = 1
 
         scene.add.existing(this)
 
         this.fishingRod = new FishingRod(scene, rodData.cast, x, y, rodData)
-
-        //Fishing animations generation
-        Animator.generateFishingAnimations(scene, this.animations.cast, GHOST.castRod, 0, 8, this.fishingRod.animationSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.fishingIdle, GHOST.fishingIdle, 0, 7, this.fishingRod.animationIdleSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.bait, GHOST.bait, 0, 7, this.fishingRod.animationSpeed)
-        Animator.generateFishingAnimations(scene, this.animations.catch, GHOST.catchFish, 0, 8, this.fishingRod.animationSpeed)
     }
 
     update(delta: number, seaLimit: number){

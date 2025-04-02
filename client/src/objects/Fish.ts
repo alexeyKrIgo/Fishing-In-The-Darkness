@@ -10,14 +10,19 @@ export class Fish extends Phaser.GameObjects.Image{
         scene.add.existing(this);
     }
 
-    setTween(xf: number, yf: number){
-        this.tween = this.scene.tweens.add({targets: this, props: {x: xf, y: this.y - 32, scale: 0.6}, duration: 500, onComplete: ()=>this.setIdle()})
+    GoUpTween(xf: number, yf: number){
+        this.tween = this.scene.tweens.add({targets: this, props: {x: xf, y: this.y - 50, scale: 0.8}, duration: 350, onComplete: ()=>this.GoDownTween()})
+        this.tween.play()
+    }
+
+    GoDownTween(){
+        this.tween.destroy()
+        this.tween = this.scene.tweens.add({targets: this, props:{y: this.y + 18, scale: 0.6}, duration: 350, onComplete: () => this.setIdle()})
         this.tween.play()
     }
 
     setIdle():void{
         this.tween.destroy()
-        console.log("hola")
         this.tween = this.scene.tweens.add({targets: this, repeat: -1, props:{y: this.y - 5}, duration: 700, yoyo: true})
         this.tween.play()
     }

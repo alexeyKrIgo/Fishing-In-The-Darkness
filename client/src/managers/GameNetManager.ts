@@ -55,6 +55,6 @@ export class GameNetManager{
 
     static receivedFish(fish: IFish){
         const fishObject = new Fish(this.scene, this.mainPlayer.character.x, this.mainPlayer.character.y, fish)
-        fishObject.setTween(this.mainPlayer.character.x, this.mainPlayer.character.y)
+        fishObject.GoUpTween(this.mainPlayer.character.x, this.mainPlayer.character.y)
     }
 }
