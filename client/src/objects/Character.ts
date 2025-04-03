@@ -3,6 +3,7 @@ import { ICharacterAnimations} from "../interfaces/Animations";
 import { ICharacterStates } from "../interfaces/Character";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: ICharacterAnimations;
@@ -29,12 +30,15 @@ export class Character extends Phaser.GameObjects.Sprite{
 
     update(delta: number, seaLimit: number){
         if(!this.states.idle && !this.states.fishing){
-            console.log(seaLimit)
-            if(this.y + this.speed*this.direction.y*delta < seaLimit){
-                this.x += this.speed*this.direction.x*delta
-                this.y += this.speed*this.direction.y*delta
-                this.fishingRod.x = this.x
-                this.fishingRod.y = this.y
+
+            //Update walking of players character only
+            if(this == GameNetManager.mainPlayer.character){
+                if(this.y + this.speed*this.direction.y*delta < seaLimit){
+                    this.x += this.speed*this.direction.x*delta
+                    this.y += this.speed*this.direction.y*delta
+                    this.fishingRod.x = this.x
+                    this.fishingRod.y = this.y
+                }
             }
             // this.speed = 40;
             // this.x += this.speed*this.direction.x*delta/1000

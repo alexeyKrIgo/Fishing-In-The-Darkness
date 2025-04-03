@@ -1,4 +1,4 @@
-import { Character } from "../interfaces/Character";
+import { Character } from "../objects/Character"
 
 export class World{
     characters: Map<string, Character>

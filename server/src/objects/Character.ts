@@ -9,6 +9,7 @@ export class Character{
     x: number
     y: number
     direction: Vector2
+
     states: ICharacterStates
     speed = 0.035; 
 
@@ -19,13 +20,10 @@ export class Character{
         this.y = getRandomInt(100, 120)
 
         //Sets direction
-        this.direction.x = 0
-        this.direction.y = 1
+        this.direction= {x: 0, y: 1}
 
         //Sets states
-        this.states.idle = true
-        this.states.fishing = false
-        this.states.tryingCatchFish = false
+        this.states={idle: true, fishing: false, tryingCatchFish: false}
 
         //Generates schema
         this.generateSchema(sessionId, room)
@@ -54,14 +52,30 @@ export class Character{
 
     update(delta: number, seaLimit: number){
         if(!this.states.idle && !this.states.fishing){
-            console.log(seaLimit)
-            if(this.y + this.speed*this.direction.y*delta < seaLimit){
-                this.x += this.speed*this.direction.x*delta
-                this.y += this.speed*this.direction.y*delta
+            if(this.schema.y + this.speed*this.direction.y*delta < seaLimit){
+                this.schema.x += this.speed*this.direction.x*delta
+                this.schema.y += this.speed*this.direction.y*delta
             }
             // this.speed = 40;
             // this.x += this.speed*this.direction.x*delta/1000
             // this.y += this.speed*this.direction.y*delta/1000
         }
+    }
+
+    move(direction: Vector2){
+
+        //Change state
+        this.states.idle = false;
+        this.schema.states.idle = this.states.idle
+
+        //Change direction
+        this.direction = direction
+        this.schema.direction.x = this.direction.x
+        this.schema.direction.y = this.direction.y
+    }
+
+    stopMove(){
+        this.states.idle = true;
+        this.schema.states.idle = this.states.idle;
     }
 }

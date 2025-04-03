@@ -15,7 +15,7 @@ export default config({
          * Define your room handlers:
          */
         gameServer.define('my_room', MyRoom);
-		gameServer.simulateLatency(60);
+		gameServer.simulateLatency(300);
 		matchMaker.controller.exposedMethods = ["join"]
 		matchMaker.create("my_room", {})
 

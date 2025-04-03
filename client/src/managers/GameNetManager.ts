@@ -36,12 +36,20 @@ export class GameNetManager{
             }
             this.scene.characters.set(sessionId, characterObject)
 
-            $(character).listen("x", (x)=>{
-                characterObject.x = x;
-            })
-
-            $(character).listen("y", (y)=>{
-                characterObject.y = y;
+            //Position sync
+            $(character).onChange(()=>{
+                if(sessionId != this.room.sessionId){
+                    characterObject.x = character.x
+                    characterObject.y = character.y
+                    characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)
+                }
+                else{
+                    const distance = new Math.Vector2(characterObject.x, characterObject.y).distance({x: character.x, y: character.y})
+                    if(distance > 50){
+                        characterObject.x = character.x
+                        characterObject.y = character.y
+                    }
+                }
             })
         })
 
@@ -54,18 +62,18 @@ export class GameNetManager{
             })
         })
         
-        this.setCommands()
+        //this.setCommands()
     }
 
-    private static setCommands(){
+    /*private static setCommands(){
         this.room.onMessage("wk", (data: {id:string, direction: Vector2})=>{
             this.receiveWalk(data.id, data.direction)
         })
-    }
+    }*/
 
-    private static receiveWalk(id: string, direction: Vector2){
+    /*private static receiveWalk(id: string, direction: Vector2){
         this.scene.characters.get(id)!.direction = new Math.Vector2(direction.x, direction.y)
-    }
+    }*/
 
     static sendWalk(direction: Vector2){
         if(!this.blocked){
@@ -73,6 +81,10 @@ export class GameNetManager{
             this.blocked = true;
             this.scene.time.delayedCall(33, ()=>this.blocked=false)
         }
+    }
+
+    static sendStopWalk(){
+        this.room.send("swk")
     }
 
     static sendFish(){

@@ -18,21 +18,21 @@ export class CharacterControls{
         input.on("pointerdown", (p:Input.Pointer) => {
             if(p.button === 0){
                 this.mouseLeft = true;
-                GameNetManager.sendWalk({x: input.mousePointer.worldX, y: input.mousePointer.worldY})
                 character.move(new Math.Vector2(input.mousePointer.worldX, input.mousePointer.worldY))
+                GameNetManager.sendWalk({x: character.direction.x, y: character.direction.y})
             }
         });
 
         input.on("pointermove",  (p:Input.Pointer) => {
             if(this.mouseLeft){
-                GameNetManager.sendWalk({x: input.mousePointer.worldX, y: input.mousePointer.worldY})
                 character.move(new Math.Vector2(input.mousePointer.worldX, input.mousePointer.worldY))
+                GameNetManager.sendWalk({x: character.direction.x, y: character.direction.y})
             }
         })
 
         input.on("pointerup", ()=>{
             this.mouseLeft = false
-            GameNetManager.sendWalk({x: input.mousePointer.worldX, y: input.mousePointer.worldY})
+            GameNetManager.sendStopWalk()
             character.states.idle = true
         })
     }
