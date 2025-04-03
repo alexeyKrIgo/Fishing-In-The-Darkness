@@ -4,6 +4,7 @@ import { Player } from "../interfaces/Player";
 import { World } from "../worlds/World";
 import { Character } from "../objects/Character";
 import { Vector2 } from "../interfaces/Vector2";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class MyRoom extends Room<MyRoomState> {
     maxClients = 4;
@@ -15,14 +16,7 @@ export class MyRoom extends Room<MyRoomState> {
         this.autoDispose = false;
         this.patchRate = 50
         this.world = new World()
-
-        this.onMessage("wk", (client, direction:Vector2)=>{
-            this.world.characters.get(client.sessionId).move(direction)
-        })
-
-        this.onMessage("swk", (client)=>{
-            this.world.characters.get(client.sessionId).stopMove()
-        })
+        GameNetManager.setCommands(this, this.world)
 
         this.setSimulationInterval((delta)=>{
             this.world.characters.forEach(c => c.update(delta, 176))

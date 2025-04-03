@@ -12,6 +12,7 @@ export class Game extends Scene {
     seaLimit: number
     test = true
     testTween: Phaser.Tweens.Tween
+    
     constructor() {
         super("Game");
     }

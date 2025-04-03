@@ -12,13 +12,12 @@ export class Server{
     fish(){
         this.fishingInterval = setInterval(()=>{
             if(this.getRandomInt(1,100) <= 10){
-                GameNetManager.receivedBait()
                 clearInterval(this.fishingInterval)
             }
         }, 350)
     }
 
     sendFish(){
-        GameNetManager.receivedFish({assetsId: 0})
+
     }
 }

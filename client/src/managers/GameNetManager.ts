@@ -36,12 +36,20 @@ export class GameNetManager{
             }
             this.scene.characters.set(sessionId, characterObject)
 
-            //Position sync
+            //Sync
             $(character).onChange(()=>{
                 if(sessionId != this.room.sessionId){
+                    //Position sync
                     characterObject.x = character.x
                     characterObject.y = character.y
+
+                    //Direction sync
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)
+
+                    //Sync states
+                    characterObject.states.idle = character.states.idle
+                    characterObject.states.fishing = character.states.fishing;
+                    characterObject.states.tryingCatchFish = character.states.tryingCatchFish
                 }
                 else{
                     const distance = new Math.Vector2(characterObject.x, characterObject.y).distance({x: character.x, y: character.y})
@@ -62,14 +70,28 @@ export class GameNetManager{
             })
         })
         
-        //this.setCommands()
+        this.setCommands()
     }
 
-    /*private static setCommands(){
-        this.room.onMessage("wk", (data: {id:string, direction: Vector2})=>{
-            this.receiveWalk(data.id, data.direction)
+    private static setCommands(){
+
+        //Receive player fish
+        this.room.onMessage("f", (id: string)=>{
+            this.scene.characters.get(id)!.fish()
         })
-    }*/
+
+        //Receive player fish got bait
+        this.room.onMessage("bf", (id: string)=>{
+            this.scene.characters.get(id)!.tryCatchFish()
+        })
+
+        //Receive player caught fish
+        this.room.onMessage("gf", (id: string)=>{
+            const fishObject = new Fish(this.scene, this.mainPlayer.character.x, this.mainPlayer.character.y, {assetsId: 0})
+            fishObject.GoUpTween(this.mainPlayer.character.x, this.mainPlayer.character.y)
+            this.scene.characters.get(id)!.catchFish()
+        })
+    }
 
     /*private static receiveWalk(id: string, direction: Vector2){
         this.scene.characters.get(id)!.direction = new Math.Vector2(direction.x, direction.y)
@@ -88,15 +110,15 @@ export class GameNetManager{
     }
 
     static sendFish(){
-        this.server.fish()
+        this.room.send("f")
     }
 
-    static receivedBait(){
-        this.mainPlayer.character.tryCatchFish()
+    static sendGotFish(){
+        this.room.send("gf")
     }
 
-    static receivedFish(fish: IFish){
+    /*static receivedFish(fish: IFish){
         const fishObject = new Fish(this.scene, this.mainPlayer.character.x, this.mainPlayer.character.y, fish)
         fishObject.GoUpTween(this.mainPlayer.character.x, this.mainPlayer.character.y)
-    }
+    }*/
 }
