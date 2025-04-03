@@ -1,3 +1,4 @@
+import { Client } from "colyseus";
 import { Vector2 } from "../interfaces/Vector2";
 import { MyRoom } from "../rooms/MyRoom";
 import { World } from "../worlds/World";
@@ -19,11 +20,21 @@ export class GameNetManager {
 
         //Receive player starts fishing
         this.room.onMessage("f", (client)=>{
-            world.startFish(this.room, client.sessionId)
+            this.room.broadcast("f", client.sessionId)
+            world.startFish(this.room, client)
+        })
+
+        //Receive player got fish   
+        this.room.onMessage("gf", (client)=>{
+            this.sendGotFish(client)
         })
     }
 
-    static sendBait(id:string){
+    static sendBait(client: Client){
+        this.room.broadcast("bf", client.sessionId)
+    }
 
+    static sendGotFish(client: Client){
+        this.room.broadcast("gf", client.sessionId)
     }
 }

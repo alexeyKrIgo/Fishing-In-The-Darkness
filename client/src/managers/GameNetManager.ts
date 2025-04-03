@@ -42,6 +42,8 @@ export class GameNetManager{
                     //Position sync
                     characterObject.x = character.x
                     characterObject.y = character.y
+                    characterObject.fishingRod.x = character.x
+                    characterObject.fishingRod.y = character.y
 
                     //Direction sync
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)
@@ -78,6 +80,7 @@ export class GameNetManager{
         //Receive player fish
         this.room.onMessage("f", (id: string)=>{
             this.scene.characters.get(id)!.fish()
+            console.log("fishing: " + id)
         })
 
         //Receive player fish got bait
@@ -87,8 +90,9 @@ export class GameNetManager{
 
         //Receive player caught fish
         this.room.onMessage("gf", (id: string)=>{
-            const fishObject = new Fish(this.scene, this.mainPlayer.character.x, this.mainPlayer.character.y, {assetsId: 0})
-            fishObject.GoUpTween(this.mainPlayer.character.x, this.mainPlayer.character.y)
+            const character = this.scene.characters.get(id)!
+            const fishObject = new Fish(this.scene, character.x, character.y, {assetsId: 0})
+            fishObject.GoUpTween(character.x, character.y)
             this.scene.characters.get(id)!.catchFish()
         })
     }
