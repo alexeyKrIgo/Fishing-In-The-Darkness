@@ -51,7 +51,7 @@ export class Character{
     }
 
     update(delta: number, seaLimit: number){
-        if(!this.states.idle && !this.states.fishing){
+        if(!this.states.idle && !this.schema.states.fishing){
             if(this.schema.y + this.speed*this.direction.y*delta < seaLimit){
                 this.schema.x += this.speed*this.direction.x*delta
                 this.schema.y += this.speed*this.direction.y*delta
@@ -77,5 +77,25 @@ export class Character{
     stopMove(){
         this.states.idle = true;
         this.schema.states.idle = this.states.idle;
+    }
+
+    //Cast fish rod
+    fish(){
+        this.states.idle = false
+        this.schema.states.idle = false
+        this.schema.states.fishing = true
+        console.log("started fishing")
+    }
+
+    //Try to catch fish state start
+    tryCatchFish(){
+        this.schema.states.tryingCatchFish = true
+    }
+
+
+    catchFish(){
+        this.states.idle = true
+        this.schema.states.idle = true
+        this.schema.states.tryingCatchFish = false
     }
 }

@@ -34,6 +34,22 @@ export class GameNetManager{
                 this.mainPlayer.character = characterObject
                 this.scene.createPlayer(characterObject)
             }
+
+            //Syn on join current states
+            if(character.states.fishing){
+                characterObject.states.idle=false
+                characterObject.states.fishing = true
+                characterObject.play({key: characterObject.animations.fishingIdle, repeat: -1})
+                characterObject.fishingRod.play({key: characterObject.fishingRod.animations.idle, repeat: -1})
+            }
+            if(character.states.tryingCatchFish){
+                characterObject.states.idle = false
+                characterObject.states.fishing = true
+                characterObject.states.tryingCatchFish = true
+                characterObject.play({key: characterObject.animations.bait, repeat: -1})
+                characterObject.fishingRod.play({key: characterObject.fishingRod.animations.bait, repeat: -1})
+            }
+
             this.scene.characters.set(sessionId, characterObject)
 
             //Sync

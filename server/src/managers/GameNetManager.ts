@@ -5,9 +5,11 @@ import { World } from "../worlds/World";
 
 export class GameNetManager {
     static room: MyRoom
+    static world: World
 
     static setCommands(room: MyRoom, world: World) {
         this.room = room
+        this.world = world
         //Receive walking event
         this.room.onMessage("wk", (client, direction: Vector2) => {
             world.characters.get(client.sessionId).move(direction)
@@ -31,6 +33,7 @@ export class GameNetManager {
     }
 
     static sendBait(client: Client){
+        this.world.characters.get(client.sessionId)?.tryCatchFish()
         this.room.broadcast("bf", client.sessionId)
     }
 
