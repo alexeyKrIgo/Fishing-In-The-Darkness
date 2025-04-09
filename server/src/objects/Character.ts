@@ -80,22 +80,25 @@ export class Character{
     }
 
     //Cast fish rod
-    fish(){
+    fish(id:string){
         this.states.idle = false
         this.schema.states.idle = false
         this.schema.states.fishing = true
-        console.log("started fishing")
+        console.log(`${id} started fishing`)
     }
 
     //Try to catch fish state start
-    tryCatchFish(){
+    tryCatchFish(id: string){
         this.schema.states.tryingCatchFish = true
+        console.log(`${id} trying to catch the fish`)
     }
 
 
-    catchFish(){
+    catchFish(id: string){
         this.states.idle = true
         this.schema.states.idle = true
         this.schema.states.tryingCatchFish = false
+        this.schema.states.fishing = false
+        console.log(`${id} caught the fish`)
     }
 }

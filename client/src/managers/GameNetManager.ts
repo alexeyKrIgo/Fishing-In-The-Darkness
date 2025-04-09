@@ -1,5 +1,4 @@
 import { Client, Room, getStateCallbacks } from "colyseus.js";
-import { IFish } from "../interfaces/Fish";
 import { Fish } from "../objects/Fish";
 import { Game } from "../scenes/Game";
 import { Server } from "../tests/Server";
@@ -55,11 +54,12 @@ export class GameNetManager{
             //Sync
             $(character).onChange(()=>{
                 if(sessionId != this.room.sessionId){
+                    let interpolationFactor = 0.7
                     //Position sync
-                    characterObject.x = character.x
-                    characterObject.y = character.y
-                    characterObject.fishingRod.x = character.x
-                    characterObject.fishingRod.y = character.y
+                    characterObject.x = Math.Linear(characterObject.x, character.x, interpolationFactor)
+                    characterObject.y = Math.Linear(characterObject.y, character.y, interpolationFactor)
+                    characterObject.fishingRod.x = characterObject.x
+                    characterObject.fishingRod.y = characterObject.y
 
                     //Direction sync
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)

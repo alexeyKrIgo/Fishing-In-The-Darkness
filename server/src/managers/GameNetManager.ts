@@ -33,11 +33,12 @@ export class GameNetManager {
     }
 
     static sendBait(client: Client){
-        this.world.characters.get(client.sessionId)?.tryCatchFish()
+        this.world.characters.get(client.sessionId)?.tryCatchFish(client.sessionId)
         this.room.broadcast("bf", client.sessionId)
     }
 
     static sendGotFish(client: Client){
         this.room.broadcast("gf", client.sessionId)
+        this.world.characters.get(client.sessionId)?.catchFish(client.sessionId)
     }
 }

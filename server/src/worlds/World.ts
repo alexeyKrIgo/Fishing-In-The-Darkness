@@ -12,9 +12,10 @@ export class World{
     }
 
     startFish(room: MyRoom, client:Client){
-        this.characters.get(client.sessionId)?.fish()
+        const character = this.characters.get(client.sessionId)
+        character?.fish(client.sessionId)
         const fishingInterval = setInterval(()=>{
-            if(getRandomInt(1,100) <= 1){
+            if(getRandomInt(1,100) <= 10){
                 GameNetManager.sendBait(client)
                 clearInterval(fishingInterval)
             }
