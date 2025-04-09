@@ -28,3 +28,8 @@ export const BASICROD:RodData = {
     bait: "basic rod bait",
     catch: "basic rod catch"
 }
+
+export const UI = {
+    inventorySlot: "inventory slot",
+    inventoryIcon: "inventory icon"
+}

@@ -19,6 +19,7 @@ export class Game extends Scene {
 
     preload() {
         this.load.setPath("assets");
+        AssetsLoader.loadInventoryUI(this)
         AssetsLoader.loadLoot(this)
         AssetsLoader.loadMap(this);
         AssetsLoader.loadGhost(this)
@@ -31,6 +32,7 @@ export class Game extends Scene {
         this.characters = new Map<string, Character>()
         GameNetManager.scene = this
         await GameNetManager.connect()
+        console.log(this.cameras.main.width)
         /*this.testTween = this.tweens.add({targets: this.character, props: {
             scale: {value: 2, duration: 3000}
         }})*/
