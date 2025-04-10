@@ -5,6 +5,7 @@ import { World } from "../worlds/World";
 import { Character } from "../objects/Character";
 import { JWT } from "@colyseus/auth";
 import { GameNetManager } from "../managers/GameNetManager";
+import { DB } from "../db/DB";
 
 export class MyRoom extends Room<MyRoomState> {
     maxClients = 4;
@@ -23,12 +24,12 @@ export class MyRoom extends Room<MyRoomState> {
         return userdata;
     }
 
-    onCreate(options: any) {
+    async onCreate(options: any) {
         this.autoDispose = false;
         this.patchRate = 50
         this.world = new World()
         GameNetManager.setCommands(this, this.world)
-
+        await DB.connect()
         this.setSimulationInterval((delta)=>{
             this.world.characters.forEach(c => c.update(delta, 176))
         })

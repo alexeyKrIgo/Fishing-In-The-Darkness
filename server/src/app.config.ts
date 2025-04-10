@@ -8,17 +8,18 @@ import { auth } from "@colyseus/auth";
  */
 import { MyRoom } from "./rooms/MyRoom";
 import { matchMaker } from "colyseus";
+import { DB } from "./db/DB";
 
 const fakeDatabase:any[] = [];
 
 auth.settings.onFindUserByEmail = async function (email) {
-    return fakeDatabase.find((entry) => entry.email === email);
+    const user = await DB.login(email)
+    return {email: user.email, password: user.password}
 }
 
 auth.settings.onRegisterWithEmailAndPassword = async function (email, password, options) {
-    const entry = { email, password, ...options };
-    fakeDatabase.push(entry);
-    return entry;
+    DB.regiser(email, password)
+    return {email:email};
 }
 
 export default config({
