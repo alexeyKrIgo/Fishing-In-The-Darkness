@@ -3,7 +3,7 @@ import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../interfaces/Player";
 import { World } from "../worlds/World";
 import { Character } from "../objects/Character";
-import { Vector2 } from "../interfaces/Vector2";
+import { JWT } from "@colyseus/auth";
 import { GameNetManager } from "../managers/GameNetManager";
 
 export class MyRoom extends Room<MyRoomState> {
@@ -11,6 +11,17 @@ export class MyRoom extends Room<MyRoomState> {
     state = new MyRoomState();
     players: Player[]
     world: World
+
+    static async onAuth (client:any, options:any, context:any) {
+        if(context.token == "mypassword"){
+            return true
+        }
+        // validate the token
+        const userdata = await JWT.verify(context.token);
+ 
+        // return userdata
+        return userdata;
+    }
 
     onCreate(options: any) {
         this.autoDispose = false;

@@ -15,10 +15,30 @@ export class GameNetManager{
     static server = new Server()
     static room: Room<MyRoomState>
     static scene: Game
-    static colyseusSDK = new Client("http://192.168.0.88:2567");
+    static colyseusSDK = new Client("ws://localhost:2567");
     static blocked = false
+    
+    static async register(nickname: string, password: string){
+        try {
+            const userdata = await this.colyseusSDK.auth.registerWithEmailAndPassword(nickname, password);
+            console.log(userdata);
+         
+        } catch (e:any) {
+            console.error(e.message);
+        }
+    }
+
+    static async login(nickname: string, password: string){
+        try{
+            await this.colyseusSDK.auth.signInWithEmailAndPassword(nickname, password)
+        }
+        catch(e){
+            return Promise.reject()
+        }
+    }
 
     static async connect(){
+        console.log(this.colyseusSDK.auth.token)
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
         const $ = getStateCallbacks(this.room)
 
