@@ -11,5 +11,7 @@ export class InventorySlot{
     constructor(scene: Scene, x:number, y:number){
         this.slot = new GameObjects.Image(scene, x, y, UI.inventorySlot)
         this.slot.scale = InventorySlot.scale
+        this.slot.setOrigin(0, 0.5)
+        scene.add.existing(this.slot)
     }
 }

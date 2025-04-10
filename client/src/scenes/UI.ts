@@ -14,8 +14,8 @@ export class UI extends Scene{
     create(){
         this.fps = new GameObjects.Text(this, 850, 20, "0", { fontFamily: 'InTheDarkness' });
         this.add.existing(this.fps);
-        const xInventory = this.scale.displaySize.width - (InventorySlot.slotWidth * InventoryRow.size + InventoryRow.gap * 4) * InventorySlot.scale
-        const inventoryUI = new InventoryUI(1, this, xInventory, 300)
+        const xInventory = 0
+        const inventoryUI = new InventoryUI(3, this, xInventory, 300)
         console.log(this.scale.displaySize.width)
     }
 

@@ -15,7 +15,7 @@ export class GameNetManager{
     static server = new Server()
     static room: Room<MyRoomState>
     static scene: Game
-    static colyseusSDK = new Client("http://localhost:2567");
+    static colyseusSDK = new Client("http://192.168.0.88:2567");
     static blocked = false
 
     static async connect(){

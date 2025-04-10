@@ -1,26 +1,24 @@
 import { GameObjects, Scene } from "phaser";
 import { InventorySlot } from "./InventorySlot";
+import { HorizontalContainer } from "../utils/HorizontalContainer";
 
-export class InventoryRow extends GameObjects.Container{
+export class InventoryRow extends HorizontalContainer{
     inventorySlots: InventorySlot[] = []
     static size = 5
-    static gap = 4
+    static gap = 10
 
     constructor(scene:Scene, x:number, y: number){
-        super(scene, x, y)
-        scene.add.existing(this)
+        super(x, y, InventoryRow.gap)
         this.generateSlots(scene)
     }
 
     generateSlots(scene:Scene){
-        //Get the size of the row with the gaps
-        const width = (InventorySlot.slotWidth * InventoryRow.size *  InventorySlot.scale)
-
-        //Population of the slots
+        const inventorySlots: GameObjects.Image[] = []
         for (let i = 0; i < InventoryRow.size; i++){
-            this.inventorySlots.push(new InventorySlot(scene, (this.x - width/2) + width/InventoryRow.size*i, this.y))
-            this.add(this.inventorySlots[i].slot)
+            this.inventorySlots.push(new InventorySlot(scene, 0,0))
+            inventorySlots.push(this.inventorySlots[i].slot as GameObjects.Image)
         }
-        console.log(this.x, this.y)
+        
+        this.placeElements(inventorySlots)
     }
 }
