@@ -4,6 +4,7 @@ import { InventorySlot } from "./InventorySlot";
 
 export class InventoryUI{
     inventoryRows = new Map<number, InventoryRow>()
+    scale = 2.5
 
     constructor(size: number, scene: Scene, x: number, y: number){
         this.generateRows(size, scene, x, y)
@@ -11,11 +12,16 @@ export class InventoryUI{
 
     generateRows(size:number, scene: Scene, x: number, y: number){
         for(let i = 0; i < size; i++){
-            this.inventoryRows.set(i, new InventoryRow(scene, x, y + i*InventorySlot.slotWidth * InventorySlot.scale + InventoryRow.gap*i))
+            this.inventoryRows.set(i, new InventoryRow(scene, x, 0, this.scale))
+            this.inventoryRows.get(i)!.y = y + i * (this.scale * InventorySlot.slotWidth + InventoryRow.gap)
         }
     }
 
-    moveX(x:number){
-        this.inventoryRows.forEach(v=>v.moveX(x))
+
+    moveRows(x:number, y:number){
+        this.inventoryRows.forEach((r,k) => {
+            r.x = x
+            r.y = y + k*(InventorySlot.slotWidth*r.scale + InventoryRow.gap)
+        })
     }
 }
