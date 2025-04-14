@@ -31,5 +31,6 @@ export const BASICROD:RodData = {
 
 export const UI = {
     inventorySlot: "inventory slot",
-    inventoryIcon: "inventory icon"
+    inventoryIcon: "inventory icon",
+    brightness: "brightness"
 }

@@ -18,7 +18,7 @@ auth.settings.onFindUserByEmail = async function (email) {
 }
 
 auth.settings.onRegisterWithEmailAndPassword = async function (email, password, options) {
-    DB.regiser(email, password)
+    await DB.regiser(email, password)
     return {email:email};
 }
 

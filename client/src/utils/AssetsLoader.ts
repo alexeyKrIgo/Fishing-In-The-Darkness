@@ -7,10 +7,15 @@ export class AssetsLoader {
     private static ghostURL = "characters/basic-ghost";
     private static mapURL = "map";
     private static basicRodURL = "fishing-rods/basic-rod"
+    private static shadersURL = "shaders/"
 
     static loadInventoryUI(scene: Scene){
         scene.load.image(UI.inventorySlot, `${this.uiInventoryURL}/slot.png`)
         scene.load.image(UI.inventoryIcon, `${this.uiInventoryURL}/inventory icon.png`)
+    }
+
+    static loadUIShaders(scene: Scene){
+        scene.load.glsl(UI.brightness, `${this.shadersURL}/slotshine.fx`, "fragment")
     }
 
     static loadLoot(scene: Scene){

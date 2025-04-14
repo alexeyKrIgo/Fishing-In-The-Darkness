@@ -30,7 +30,8 @@ export class GameNetManager{
 
     static async login(nickname: string, password: string){
         try{
-            await this.colyseusSDK.auth.signInWithEmailAndPassword(nickname, password)
+            const test = await this.colyseusSDK.auth.signInWithEmailAndPassword(nickname, password)
+            console.log(test)
         }
         catch(e){
             return Promise.reject()

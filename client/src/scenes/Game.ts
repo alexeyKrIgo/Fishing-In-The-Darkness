@@ -24,6 +24,7 @@ export class Game extends Scene {
         AssetsLoader.loadMap(this);
         AssetsLoader.loadGhost(this)
         AssetsLoader.loadBasicRod(this)
+        AssetsLoader.loadUIShaders(this)
     }
 
     async create() {
