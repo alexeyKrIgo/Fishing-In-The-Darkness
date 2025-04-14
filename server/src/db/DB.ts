@@ -1,5 +1,6 @@
 import mongoose from "mongoose";
 import { User } from "./schemas/user";
+import { Fish } from "./schemas/fish";
 
 export class DB{
     static async connect(){
@@ -15,5 +16,10 @@ export class DB{
     static async login(email: string){
         const user = await User.findOne({email: email})
         return user
+    }
+
+    static async getInventory(id: string){
+        const fishes = await Fish.find({owner: id})
+        return fishes
     }
 }

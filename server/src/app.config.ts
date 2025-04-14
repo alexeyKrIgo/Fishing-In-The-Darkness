@@ -14,7 +14,7 @@ const fakeDatabase:any[] = [];
 
 auth.settings.onFindUserByEmail = async function (email) {
     const user = await DB.login(email)
-    return {email: user.email, password: user.password}
+    return {_id: user._id, email: user.email, password: user.password}
 }
 
 auth.settings.onRegisterWithEmailAndPassword = async function (email, password, options) {

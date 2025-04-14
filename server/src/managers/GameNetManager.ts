@@ -38,7 +38,9 @@ export class GameNetManager {
     }
 
     static sendGotFish(client: Client){
-        this.room.broadcast("gf", client.sessionId)
-        this.world.characters.get(client.sessionId)?.catchFish(client.sessionId)
+        const character = this.world.characters.get(client.sessionId)
+        const lootFish = this.world.charactersLoot.get(client.sessionId)?.get(character.fishesCounter)
+        this.room.broadcast("gf", {client:client.sessionId, fish: lootFish})
+        character?.catchFish(client.sessionId)
     }
 }

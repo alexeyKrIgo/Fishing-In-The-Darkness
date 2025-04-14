@@ -1,7 +1,8 @@
-export interface IFish{
+export interface Fish{
     owner: string,
     row: number,
     column: number
+    asset: number
 }
 
 export interface ToLootFish{

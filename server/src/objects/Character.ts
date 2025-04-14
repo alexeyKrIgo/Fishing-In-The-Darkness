@@ -13,6 +13,9 @@ export class Character{
     states: ICharacterStates
     speed = 0.035; 
 
+    //Accountes fishes baited to generate and unique id for them
+    fishesCounter = 0
+
     constructor(room: MyRoom, sessionId: string){
 
         //Sets position
@@ -83,12 +86,15 @@ export class Character{
     fish(id:string){
         this.states.idle = false
         this.schema.states.idle = false
+
+        this.states.fishing = true
         this.schema.states.fishing = true
         console.log(`${id} started fishing`)
     }
 
     //Try to catch fish state start
     tryCatchFish(id: string){
+        this.states.tryingCatchFish = true
         this.schema.states.tryingCatchFish = true
         console.log(`${id} trying to catch the fish`)
     }
@@ -97,8 +103,11 @@ export class Character{
     catchFish(id: string){
         this.states.idle = true
         this.schema.states.idle = true
+
+        this.states.tryingCatchFish = false
         this.schema.states.tryingCatchFish = false
+
+        this.states.fishing = false
         this.schema.states.fishing = false
-        console.log(`${id} caught the fish`)
     }
 }

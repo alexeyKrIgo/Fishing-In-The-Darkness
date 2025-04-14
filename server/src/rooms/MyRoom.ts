@@ -6,6 +6,8 @@ import { Character } from "../objects/Character";
 import { JWT } from "@colyseus/auth";
 import { GameNetManager } from "../managers/GameNetManager";
 import { DB } from "../db/DB";
+import { SInventory } from "../schemas/inventory/SInventory";
+import { SFish } from "../schemas/inventory/SFish";
 
 export class MyRoom extends Room<MyRoomState> {
     maxClients = 4;
@@ -35,11 +37,27 @@ export class MyRoom extends Room<MyRoomState> {
         })
     }
 
-    onJoin(client: Client, options: any) {
-        //this.generateCharacter(client.sessionId)
+    async onJoin(client: Client, options: any) {
+        //generates character
         const character = new Character(this, client.sessionId)
-        this.world.characters.set(client.sessionId, character)
+        this.world.addCharacter(client, character)
         this.state.characters.set(client.sessionId, character.schema)
+
+        //Generates inventory
+        const inventory = new SInventory()
+
+        //Generates inventory
+        this.state.inventories.set(client.auth._id, inventory)
+
+        //Populate inventory with fishes
+        const fishes = await DB.getInventory(client.auth._id)
+        fishes.forEach(f => {
+            const sfish = new SFish()
+            sfish.owner = f.owner.toString()
+            sfish.row = f.row
+            sfish.column = f.column
+            inventory.fishes.set(f._id.toString(), sfish)
+        })
         console.log(client.sessionId, "joined!");
     }
 

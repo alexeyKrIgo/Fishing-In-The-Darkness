@@ -1,11 +1,11 @@
 import { Scene, Tweens } from "phaser";
-import { IFish } from "../interfaces/Fish";
+import { ToLootFish } from "../interfaces/Fish";
 import { GENERAL } from "../utils/AssetsGlobals";
 
 export class Fish extends Phaser.GameObjects.Image{
     tween: Tweens.Tween
-    constructor(scene: Scene, x:number, y:number, data:IFish){
-        super(scene, x, y + 50, GENERAL.loot, data.assetsId)
+    constructor(scene: Scene, x:number, y:number, data:ToLootFish){
+        super(scene, x, y + 50, GENERAL.loot, data.asset)
         this.scale = 0.1
         scene.add.existing(this);
     }

@@ -9,6 +9,7 @@ import { GHOST } from "../utils/AssetsGlobals";
 import { Math, Scenes } from "phaser";
 import { Ghost } from "../objects/Ghost";
 import { Vector2 } from "../interfaces/Vector2";
+import { ToLootFish } from "../interfaces/Fish";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -126,11 +127,11 @@ export class GameNetManager{
         })
 
         //Receive player caught fish
-        this.room.onMessage("gf", (id: string)=>{
-            const character = this.scene.characters.get(id)!
-            const fishObject = new Fish(this.scene, character.x, character.y, {assetsId: 0})
+        this.room.onMessage("gf", (data:{client:string, fish: ToLootFish})=>{
+            const character = this.scene.characters.get(data.client)!
+            const fishObject = new Fish(this.scene, character.x, character.y, data.fish)
             fishObject.GoUpTween(character.x, character.y)
-            this.scene.characters.get(id)!.catchFish()
+            this.scene.characters.get(data.client)!.catchFish()
         })
     }
 

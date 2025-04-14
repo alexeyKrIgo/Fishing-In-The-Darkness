@@ -16,6 +16,8 @@ export class UI extends Scene{
     create(){
         this.fps = new GameObjects.Text(this, 850, 20, "0", { fontFamily: 'InTheDarkness' });
         this.add.existing(this.fps);
+
+        //Generate inventory ui
         this.inventoryUI = new InventoryUI(3, this, 0, 0)
         this.inventoryUI.inventoryRows.forEach(r => r.setVisible(false))
         this.inventoryUI.moveRows(0, 200)
@@ -26,6 +28,8 @@ export class UI extends Scene{
                 undefined, { brightness: { type: "1f", value: 1.0 } }
             )
         )
+
+        //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)
         this.inventoryIcon = this.makeShader(UIGlobals.brightness, UIGlobals.inventoryIcon)
         this.inventorySlot.setInteractive()
