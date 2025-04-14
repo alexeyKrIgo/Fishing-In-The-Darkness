@@ -39,7 +39,7 @@ export class MyRoom extends Room<MyRoomState> {
 
     async onJoin(client: Client, options: any) {
         //generates character
-        const character = new Character(this, client.sessionId)
+        const character = new Character(this, client.sessionId, client.auth.inventory)
         this.world.addCharacter(client, character)
         this.state.characters.set(client.sessionId, character.schema)
 

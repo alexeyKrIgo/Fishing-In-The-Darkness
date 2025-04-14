@@ -9,7 +9,7 @@ export class DB{
     }
 
     static async regiser(email: string, password: string){
-        const user = new User({email: email, password: password})
+        const user = new User({email: email, password: password, inventory: {size:3, full: false}})
         await user.save()
     }
 
