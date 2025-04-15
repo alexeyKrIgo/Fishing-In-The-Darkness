@@ -1,4 +1,4 @@
-import { Scene, Tweens } from "phaser";
+import { Math, Scene, Tweens } from "phaser";
 import { ToLootFish } from "../interfaces/Fish";
 import { GENERAL } from "../utils/AssetsGlobals";
 
@@ -7,11 +7,14 @@ export class Fish extends Phaser.GameObjects.Image{
     constructor(scene: Scene, x:number, y:number, data:ToLootFish){
         super(scene, x, y + 50, GENERAL.loot, data.asset)
         this.scale = 0.1
+        this.depth = 0
         scene.add.existing(this);
     }
 
     GoUpTween(xf: number, yf: number){
-        this.tween = this.scene.tweens.add({targets: this, props: {x: xf, y: this.y - 50, scale: 0.8}, duration: 350, onComplete: ()=>this.GoDownTween()})
+        const newY = Math.RND.integerInRange(50, 100)
+        const newX = Math.RND.integerInRange(-50, 50)
+        this.tween = this.scene.tweens.add({targets: this, props: {x: xf - newX, y: this.y - newY, scale: 0.8}, duration: 400, onComplete: ()=>this.GoDownTween()})
         this.tween.play()
     }
 

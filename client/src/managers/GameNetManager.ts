@@ -122,8 +122,8 @@ export class GameNetManager{
         })
 
         //Receive player fish got bait
-        this.room.onMessage("bf", (id: string)=>{
-            this.scene.characters.get(id)!.tryCatchFish()
+        this.room.onMessage("bf", (data:{id: string, fish: ToLootFish})=>{
+            this.scene.characters.get(data.id)!.tryCatchFish(data.fish)
         })
 
         //Receive player caught fish
@@ -155,8 +155,8 @@ export class GameNetManager{
         this.room.send("f")
     }
 
-    static sendGotFish(){
-        this.room.send("gf")
+    static sendGotFish(fish: ToLootFish){
+        this.room.send("gf", fish)
     }
 
     /*static receivedFish(fish: IFish){

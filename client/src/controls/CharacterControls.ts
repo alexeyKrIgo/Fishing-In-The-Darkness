@@ -44,7 +44,7 @@ export class CharacterControls{
                 GameNetManager.sendFish()
             }
             else if(character.states.tryingCatchFish){
-                GameNetManager.sendGotFish()
+                GameNetManager.sendGotFish(character.fishToCatch)
                 character.catchFish()
             }
         }

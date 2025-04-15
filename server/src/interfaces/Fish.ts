@@ -6,8 +6,8 @@ export interface Fish{
 }
 
 export interface ToLootFish{
+    id: string
     owner: string
-    id: number
     asset: number
 }
 

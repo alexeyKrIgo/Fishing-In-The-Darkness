@@ -8,6 +8,7 @@ import { GameNetManager } from "../managers/GameNetManager";
 import { DB } from "../db/DB";
 import { SInventory } from "../schemas/inventory/SInventory";
 import { SFish } from "../schemas/inventory/SFish";
+import { Fish } from "../interfaces/Fish";
 
 export class MyRoom extends Room<MyRoomState> {
     maxClients = 4;
@@ -38,26 +39,29 @@ export class MyRoom extends Room<MyRoomState> {
     }
 
     async onJoin(client: Client, options: any) {
-        //generates character
-        const character = new Character(this, client.sessionId, client.auth.inventory)
-        this.world.addCharacter(client, character)
-        this.state.characters.set(client.sessionId, character.schema)
 
         //Generates inventory
         const inventory = new SInventory()
-
-        //Generates inventory
+        const inventoryDB = client.auth.inventory
         this.state.inventories.set(client.auth._id, inventory)
 
         //Populate inventory with fishes
         const fishes = await DB.getInventory(client.auth._id)
+        const savedFishes: Fish[] = []
         fishes.forEach(f => {
             const sfish = new SFish()
             sfish.owner = f.owner.toString()
             sfish.row = f.row
             sfish.column = f.column
             inventory.fishes.set(f._id.toString(), sfish)
+            savedFishes.push({owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset})
         })
+
+        //generates character
+        const character = new Character(this, client.sessionId, {size: inventoryDB.size, full: inventoryDB.full, savedFishes:savedFishes, toSaveFishes: []})
+        this.world.addCharacter(client, character)
+        this.state.characters.set(client.sessionId, character.schema)
+
         console.log(client.sessionId, "joined!");
     }
 

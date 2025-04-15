@@ -1,4 +1,5 @@
 import { ICharacterStates } from "../interfaces/Character";
+import { Fish } from "../interfaces/Fish";
 import { Inventory } from "../interfaces/Inventory";
 import { Vector2 } from "../interfaces/Vector2";
 import { MyRoom } from "../rooms/MyRoom";
@@ -18,7 +19,7 @@ export class Character{
     fishesCounter = 0
     inventory: Inventory
 
-    constructor(room: MyRoom, sessionId: string, inventory: Inventory){
+    constructor(room: MyRoom, sessionId: string, inventory:Inventory){
 
         //Sets position
         this.x = getRandomInt(100, 200)
@@ -31,7 +32,6 @@ export class Character{
         this.states={idle: true, fishing: false, tryingCatchFish: false}
 
         this.inventory = inventory
-        console.log(this.inventory)
 
         //Generates schema
         this.generateSchema(sessionId, room)

@@ -2,6 +2,7 @@ import { Client } from "colyseus";
 import { Vector2 } from "../interfaces/Vector2";
 import { MyRoom } from "../rooms/MyRoom";
 import { World } from "../worlds/World";
+import { ToLootFish } from "../interfaces/Fish";
 
 export class GameNetManager {
     static room: MyRoom
@@ -27,20 +28,23 @@ export class GameNetManager {
         })
 
         //Receive player got fish   
-        this.room.onMessage("gf", (client)=>{
-            this.sendGotFish(client)
+        this.room.onMessage("gf", (client, fish:ToLootFish)=>{
+            this.sendGotFish(client, fish)
+        })
+
+        this.room.onMessage("cf", (client, )=>{
+
         })
     }
 
-    static sendBait(client: Client){
+    static sendBait(client: Client, fish:ToLootFish){
         this.world.characters.get(client.sessionId)?.tryCatchFish(client.sessionId)
-        this.room.broadcast("bf", client.sessionId)
+        this.room.broadcast("bf", {id: client.sessionId, fish: fish})
     }
 
-    static sendGotFish(client: Client){
+    static sendGotFish(client: Client, fish: ToLootFish){
         const character = this.world.characters.get(client.sessionId)
-        const lootFish = this.world.charactersLoot.get(client.sessionId)?.get(character.fishesCounter)
-        this.room.broadcast("gf", {client:client.sessionId, fish: lootFish})
+        this.room.broadcast("gf", {client:client.sessionId, fish: fish})
         character?.catchFish(client.sessionId)
     }
 }

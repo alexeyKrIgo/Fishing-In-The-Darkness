@@ -1,6 +1,7 @@
 import mongoose from "mongoose";
 import { User } from "./schemas/user";
 import { Fish } from "./schemas/fish";
+import { Fish as IFish} from "../interfaces/Fish";
 
 export class DB{
     static async connect(){
@@ -21,5 +22,12 @@ export class DB{
     static async getInventory(id: string){
         const fishes = await Fish.find({owner: id})
         return fishes
+    }
+
+    static async saveInventory(fishes: IFish[]){
+        fishes.forEach(f =>{
+            let fish = new Fish({owner: f.owner, row: f.row, column: f.column, asset: f.asset})
+            fish.save()
+        })
     }
 }

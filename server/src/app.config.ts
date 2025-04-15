@@ -10,8 +10,6 @@ import { MyRoom } from "./rooms/MyRoom";
 import { matchMaker } from "colyseus";
 import { DB } from "./db/DB";
 
-const fakeDatabase:any[] = [];
-
 auth.settings.onFindUserByEmail = async function (email) {
     const user = await DB.login(email)
     return {_id: user._id, email: user.email, password: user.password, inventory: user.inventory}

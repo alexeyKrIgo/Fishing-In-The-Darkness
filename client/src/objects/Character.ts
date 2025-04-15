@@ -4,6 +4,7 @@ import { ICharacterStates } from "../interfaces/Character";
 import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
 import { GameNetManager } from "../managers/GameNetManager";
+import { ToLootFish } from "../interfaces/Fish";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: ICharacterAnimations;
@@ -12,6 +13,7 @@ export class Character extends Phaser.GameObjects.Sprite{
     states: ICharacterStates
     PI = Math.PI2/2;
     fishingRod: FishingRod
+    fishToCatch: ToLootFish
 
     constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates, animations: ICharacterAnimations,
         rodData: RodData
@@ -52,6 +54,7 @@ export class Character extends Phaser.GameObjects.Sprite{
     }
 
     updateWalkingAnimation(animations: Array<string>, repeat: number, startFrame: number){
+        console.log(this.depth)
         if(this.direction.angle() >= this.PI/4 && this.direction.angle() < 3*this.PI/4){
             // Checks if animation is different of which is being played or the animation of "attack" has finished
             // but the attack button is still being pressed
@@ -104,7 +107,8 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.fishingRod.play({key: this.fishingRod.animations.cast})
     }
 
-    tryCatchFish(){
+    tryCatchFish(fish:ToLootFish){
+        this.fishToCatch = fish
         this.states.tryingCatchFish = true
         this.play({key: this.animations.bait, repeat: -1})
         this.fishingRod.play({key: this.fishingRod.animations.bait, repeat: -1})

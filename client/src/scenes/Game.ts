@@ -43,7 +43,7 @@ export class Game extends Scene {
     createPlayer(character: Character){
         this.cameras.main.zoom = 4;
         this.cameras.main.centerOn(character.x, character.y)
-        this.cameras.main.startFollow(character)
+        this.cameras.main.startFollow(character, true)
         this.cameras.main.setBounds(0,0, 560, 240)
 
         CharacterControls.generateCharacterMoveControl(this.input, character)

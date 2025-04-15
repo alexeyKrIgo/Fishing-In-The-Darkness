@@ -2,6 +2,7 @@ export interface IFish{
     owner: string,
     row: number,
     column: number
+    asset: number
 }
 
 export interface ToLootFish{

@@ -3,23 +3,24 @@ import { Character } from "../objects/Character"
 import { MyRoom } from "../rooms/MyRoom"
 import { getRandomInt } from "../utils/Maths"
 import { GameNetManager } from "../managers/GameNetManager"
-import { Fish, StatsFish, ToLootFish } from "../interfaces/Fish"
+import { StatsFish, ToLootFish } from "../interfaces/Fish"
 import { GVFishes } from "../fishes/GraveYardFishes"
+import crypto from "node:crypto"
 
 export class World{
     characters: Map<string, Character>
-    charactersLoot: Map<string, Map<number, ToLootFish>>
+    charactersLoot: Map<string, Map<string, ToLootFish>>
     pool: StatsFish[]
 
     constructor(){
         this.characters = new Map<string, Character>()
-        this.charactersLoot = new Map<string, Map<number, ToLootFish>>()
+        this.charactersLoot = new Map<string, Map<string, ToLootFish>>()
         this.generatePool()
     }
 
     addCharacter(client: Client, character:Character){
         this.characters.set(client.sessionId, character)
-        this.charactersLoot.set(client.sessionId, new Map<number, ToLootFish>)
+        this.charactersLoot.set(client.sessionId, new Map<string, ToLootFish>)
     }
 
     startFish(room: MyRoom, client:Client){
@@ -28,9 +29,10 @@ export class World{
             character?.fish(client.sessionId)
             const fishingInterval = setInterval(()=>{
                 if(getRandomInt(1,100) <= 10){
-                    const fish = this.generateFish(client, character)
+                    const fish:ToLootFish = this.generateFish(client, character)
+                    console.log(`${client.auth.id} bited ${fish.id} with asset ${fish.asset}`)
                     this.charactersLoot.get(client.sessionId)?.set(fish.id, fish)
-                    GameNetManager.sendBait(client)
+                    GameNetManager.sendBait(client, fish)
                     clearInterval(fishingInterval)
                 }
             }, 350)
@@ -49,6 +51,7 @@ export class World{
 
     generateFish(client:Client, character: Character): ToLootFish{
         const statsFish = this.pool[getRandomInt(0, this.pool.length - 1)]
-        return {owner: client.auth._id, id: ++character.fishesCounter, asset: statsFish.asset}
+        const id = crypto.randomBytes(16).toString('base64');
+        return {id: id, owner: client.auth._id, asset: statsFish.asset}
     }
 }
