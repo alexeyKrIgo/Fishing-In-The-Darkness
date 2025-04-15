@@ -6,12 +6,14 @@ import { CharacterControls } from "../controls/CharacterControls";
 import { Ghost } from "../objects/Ghost";
 import { UI } from "./UI";
 import { GameNetManager } from "../managers/GameNetManager";
+import { Fish } from "../objects/Fish";
 
 export class Game extends Scene {
     characters: Map<string, Character>
     seaLimit: number
     test = true
     testTween: Phaser.Tweens.Tween
+    static loot: Fish[] = []
     
     constructor() {
         super("Game");

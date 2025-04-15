@@ -10,6 +10,7 @@ import { Math, Scenes } from "phaser";
 import { Ghost } from "../objects/Ghost";
 import { Vector2 } from "../interfaces/Vector2";
 import { ToLootFish } from "../interfaces/Fish";
+import { PickUp } from "../ui/actions/PickUp";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -53,6 +54,7 @@ export class GameNetManager{
             if(sessionId == this.room.sessionId){
                 this.mainPlayer = new Player()
                 this.mainPlayer.character = characterObject
+                this.mainPlayer.character.pickUp = new PickUp(this.scene)
                 this.scene.createPlayer(characterObject)
             }
 
@@ -130,6 +132,7 @@ export class GameNetManager{
         this.room.onMessage("gf", (data:{client:string, fish: ToLootFish})=>{
             const character = this.scene.characters.get(data.client)!
             const fishObject = new Fish(this.scene, character.x, character.y, data.fish)
+            Game.loot.push(fishObject)
             fishObject.GoUpTween(character.x, character.y)
             this.scene.characters.get(data.client)!.catchFish()
         })

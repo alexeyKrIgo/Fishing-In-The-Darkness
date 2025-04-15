@@ -4,10 +4,14 @@ import { GENERAL } from "../utils/AssetsGlobals";
 
 export class Fish extends Phaser.GameObjects.Image{
     tween: Tweens.Tween
+    fishData: ToLootFish
+
     constructor(scene: Scene, x:number, y:number, data:ToLootFish){
         super(scene, x, y + 50, GENERAL.loot, data.asset)
+        this.fishData = data
         this.scale = 0.1
-        this.depth = 0
+        this.depth = 1
+        console.log(this.depth)
         scene.add.existing(this);
     }
 

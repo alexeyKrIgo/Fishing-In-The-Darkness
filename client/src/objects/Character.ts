@@ -5,6 +5,7 @@ import { FishingRod } from "./FishingRod";
 import { RodData } from "../interfaces/FishingRod";
 import { GameNetManager } from "../managers/GameNetManager";
 import { ToLootFish } from "../interfaces/Fish";
+import { PickUp } from "../ui/actions/PickUp";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: ICharacterAnimations;
@@ -14,6 +15,7 @@ export class Character extends Phaser.GameObjects.Sprite{
     PI = Math.PI2/2;
     fishingRod: FishingRod
     fishToCatch: ToLootFish
+    pickUp: PickUp|null = null
 
     constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates, animations: ICharacterAnimations,
         rodData: RodData
@@ -31,6 +33,11 @@ export class Character extends Phaser.GameObjects.Sprite{
     }
 
     update(delta: number, seaLimit: number){
+        this.depth = this.y
+        this.fishingRod.depth = this.y
+        if(this.pickUp){
+            this.pickUp.update(this)
+        }
         if(!this.states.idle && !this.states.fishing){
 
             //Update walking of players character only
