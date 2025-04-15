@@ -3,7 +3,7 @@ import { Character } from "../objects/Character"
 import { MyRoom } from "../rooms/MyRoom"
 import { getRandomInt } from "../utils/Maths"
 import { GameNetManager } from "../managers/GameNetManager"
-import { StatsFish, ToLootFish } from "../interfaces/Fish"
+import { Fish, StatsFish, ToLootFish } from "../interfaces/Fish"
 import { GVFishes } from "../fishes/GraveYardFishes"
 import crypto from "node:crypto"
 
@@ -53,5 +53,15 @@ export class World{
         const statsFish = this.pool[getRandomInt(0, this.pool.length - 1)]
         const id = crypto.randomBytes(16).toString('base64');
         return {id: id, owner: client.auth._id, asset: statsFish.asset}
+    }
+
+    pickUpFish(client: Client, fishId: string){
+        const character = this.characters.get(client.sessionId)
+        const fish = this.charactersLoot.get(client.sessionId).get(fishId)!
+        const pickedFish = character.pickUpFish(client.auth._id, fish)
+        if(pickedFish){
+            GameNetManager.sendPickUpFish(fish, client)
+            GameNetManager.sendPrivatePickUpFish(pickedFish, client)
+        }
     }
 }

@@ -1,10 +1,12 @@
+import { Client } from "colyseus";
 import { ICharacterStates } from "../interfaces/Character";
-import { Fish } from "../interfaces/Fish";
-import { Inventory } from "../interfaces/Inventory";
+import { Fish, ToLootFish } from "../interfaces/Fish";
 import { Vector2 } from "../interfaces/Vector2";
+import { Inventory } from "../inventory/Inventory";
 import { MyRoom } from "../rooms/MyRoom";
 import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
+import { InventoryDB } from "../interfaces/Inventory";
 
 export class Character{
     schema: SCharacter
@@ -19,7 +21,7 @@ export class Character{
     fishesCounter = 0
     inventory: Inventory
 
-    constructor(room: MyRoom, sessionId: string, inventory:Inventory){
+    constructor(room: MyRoom, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[]){
 
         //Sets position
         this.x = getRandomInt(100, 200)
@@ -31,7 +33,10 @@ export class Character{
         //Sets states
         this.states={idle: true, fishing: false, tryingCatchFish: false}
 
-        this.inventory = inventory
+        this.inventory = new Inventory(inventoryDB.size)
+        fishes.forEach(f=>{
+            this.inventory.inventorySlots[f.row][f.column] = f
+        })
 
         //Generates schema
         this.generateSchema(sessionId, room)
@@ -114,5 +119,19 @@ export class Character{
 
         this.states.fishing = false
         this.schema.states.fishing = false
+    }
+
+    pickUpFish(owner: string, toSaveFish: ToLootFish):Fish{
+        let fish: Fish|null = null
+        for(let row = 0; row < this.inventory.size; row++){
+            let slotIndex = this.inventory.inventorySlots[row].findIndex(slot => !slot)
+            if(slotIndex !== -1){
+                fish = {owner: owner, row: row, column: slotIndex, asset:toSaveFish.asset, saved: false}
+                this.inventory.inventorySlots[row][slotIndex] = fish
+                break;
+            }
+        }
+
+        return fish
     }
 }

@@ -1,7 +1,7 @@
 import { Character } from "../objects/Character";
 
 export class Player{
-    id: number;
+    id: string;
     name: string;
     character:Character
 }

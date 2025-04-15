@@ -2,7 +2,7 @@ import { Client } from "colyseus";
 import { Vector2 } from "../interfaces/Vector2";
 import { MyRoom } from "../rooms/MyRoom";
 import { World } from "../worlds/World";
-import { ToLootFish } from "../interfaces/Fish";
+import { Fish, ToLootFish } from "../interfaces/Fish";
 
 export class GameNetManager {
     static room: MyRoom
@@ -32,8 +32,8 @@ export class GameNetManager {
             this.sendGotFish(client, fish)
         })
 
-        this.room.onMessage("cf", (client, )=>{
-
+        this.room.onMessage("pf", (client, data: ToLootFish)=>{
+            this.world.pickUpFish(client, data.id)
         })
     }
 
@@ -46,5 +46,13 @@ export class GameNetManager {
         const character = this.world.characters.get(client.sessionId)
         this.room.broadcast("gf", {client:client.sessionId, fish: fish})
         character?.catchFish(client.sessionId)
+    }
+
+    static sendPickUpFish(toLootFish: ToLootFish, client:Client){
+        this.room.broadcast("pf", {client:client.sessionId, toLootFish: toLootFish})
+    }
+
+    static sendPrivatePickUpFish(fish: Fish, client: Client){
+        client.send("ppf", fish)
     }
 }

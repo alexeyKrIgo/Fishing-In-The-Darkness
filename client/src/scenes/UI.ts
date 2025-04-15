@@ -5,7 +5,7 @@ export class UI extends Scene{
 
     fps:GameObjects.Text
     miscScale = 2.5
-    inventoryUI: InventoryUI
+    static inventoryUI: InventoryUI
     inventorySlot: GameObjects.Shader
     inventoryIcon: GameObjects.Shader
 
@@ -18,9 +18,9 @@ export class UI extends Scene{
         this.add.existing(this.fps);
 
         //Generate inventory ui
-        this.inventoryUI = new InventoryUI(3, this, 0, 0)
-        this.inventoryUI.inventoryRows.forEach(r => r.setVisible(false))
-        this.inventoryUI.moveRows(0, 200)
+        UI.inventoryUI = new InventoryUI(3, this, 0, 0)
+        UI.inventoryUI.inventoryRows.forEach(r => r.setVisible(false))
+        UI.inventoryUI.moveRows(0, 200)
         this.cache.shader.add(
             UIGlobals.brightness, 
             new Display.BaseShader(UIGlobals.brightness, 
@@ -69,7 +69,7 @@ export class UI extends Scene{
                     callbackScope: this,
                     callback: ()=>{
                         this.inventoryIcon.setUniform("brightness.value", 1);
-                        this.inventoryUI.inventoryRows.forEach(r => r.setVisible(!r.visible))
+                        UI.inventoryUI.inventoryRows.forEach(r => r.setVisible(!r.visible))
                     }
                 })
                 this.inventorySlot.scene.time.addEvent({

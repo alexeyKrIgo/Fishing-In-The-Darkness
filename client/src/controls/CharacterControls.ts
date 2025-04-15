@@ -6,12 +6,15 @@ export class CharacterControls{
     static mouseLeft = false;
     static keys: {
         F: Input.Keyboard.Key|null
+        Space: Input.Keyboard.Key|null
     } = {
-        F: null
+        F: null,
+        Space: null
     }
 
     static generateKeys(input: Input.InputPlugin){
         this.keys.F = input.keyboard!.addKey(Input.Keyboard.KeyCodes.F)
+        this.keys.Space = input.keyboard!.addKey(Input.Keyboard.KeyCodes.SPACE)
     }
 
     static generateCharacterMoveControl(input: Input.InputPlugin, character:Character){
@@ -47,6 +50,11 @@ export class CharacterControls{
                 GameNetManager.sendGotFish(character.fishToCatch)
                 character.catchFish()
             }
+        }
+
+        if(Input.Keyboard.JustDown(this.keys.Space!)){
+            if(character.pickUp!.fish)
+                character.pickUp?.pickFish()
         }
     }
 }

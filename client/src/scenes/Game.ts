@@ -13,7 +13,7 @@ export class Game extends Scene {
     seaLimit: number
     test = true
     testTween: Phaser.Tweens.Tween
-    static loot: Fish[] = []
+    static loot: Map<string, Fish> = new Map<string, Fish>()
     
     constructor() {
         super("Game");

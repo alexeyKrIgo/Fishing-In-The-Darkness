@@ -53,12 +53,12 @@ export class MyRoom extends Room<MyRoomState> {
             sfish.owner = f.owner.toString()
             sfish.row = f.row
             sfish.column = f.column
-            inventory.fishes.set(f._id.toString(), sfish)
-            savedFishes.push({owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset})
+            inventory.fishes.push(sfish)
+            savedFishes.push({owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset, saved: true})
         })
 
         //generates character
-        const character = new Character(this, client.sessionId, {size: inventoryDB.size, full: inventoryDB.full, savedFishes:savedFishes, toSaveFishes: []})
+        const character = new Character(this, client.sessionId, inventoryDB, savedFishes)
         this.world.addCharacter(client, character)
         this.state.characters.set(client.sessionId, character.schema)
 

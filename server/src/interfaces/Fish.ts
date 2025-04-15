@@ -3,6 +3,7 @@ export interface Fish{
     row: number,
     column: number
     asset: number
+    saved: boolean
 }
 
 export interface ToLootFish{

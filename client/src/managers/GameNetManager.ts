@@ -9,8 +9,9 @@ import { GHOST } from "../utils/AssetsGlobals";
 import { Math, Scenes } from "phaser";
 import { Ghost } from "../objects/Ghost";
 import { Vector2 } from "../interfaces/Vector2";
-import { ToLootFish } from "../interfaces/Fish";
+import { IFish, ToLootFish } from "../interfaces/Fish";
 import { PickUp } from "../ui/actions/PickUp";
+import { UI } from "../scenes/UI";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -43,6 +44,7 @@ export class GameNetManager{
     static async connect(){
         console.log(this.colyseusSDK.auth.token)
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
+        const userData = await this.colyseusSDK.auth.getUserData()
         const $ = getStateCallbacks(this.room)
 
         //Adds a new character to the game scene
@@ -53,6 +55,7 @@ export class GameNetManager{
             //Creates main player
             if(sessionId == this.room.sessionId){
                 this.mainPlayer = new Player()
+                this.mainPlayer.id = userData.user._id
                 this.mainPlayer.character = characterObject
                 this.mainPlayer.character.pickUp = new PickUp(this.scene)
                 this.scene.createPlayer(characterObject)
@@ -132,9 +135,21 @@ export class GameNetManager{
         this.room.onMessage("gf", (data:{client:string, fish: ToLootFish})=>{
             const character = this.scene.characters.get(data.client)!
             const fishObject = new Fish(this.scene, character.x, character.y, data.fish)
-            Game.loot.push(fishObject)
+            Game.loot.set(fishObject.fishData.id, fishObject)
             fishObject.GoUpTween(character.x, character.y)
             this.scene.characters.get(data.client)!.catchFish()
+        })
+
+        this.room.onMessage("pf", (data: {client: string, toLootFish:ToLootFish})=>{
+            Game.loot.get(data.toLootFish.id)?.destroy()
+            Game.loot.delete(data.toLootFish.id)
+            if(data.client === this.room.sessionId){
+                this.mainPlayer.character.pickUp!.fish = null
+            }
+        })
+        
+        this.room.onMessage("ppf", (fish:IFish)=>{
+            UI.inventoryUI.addFish(fish)
         })
     }
 
@@ -160,6 +175,10 @@ export class GameNetManager{
 
     static sendGotFish(fish: ToLootFish){
         this.room.send("gf", fish)
+    }
+
+    static sendPickUpFish(fish: ToLootFish){
+        this.room.send("pf", fish)
     }
 
     /*static receivedFish(fish: IFish){

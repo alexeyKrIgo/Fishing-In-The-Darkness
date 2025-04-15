@@ -2,6 +2,8 @@ import { GameObjects, Math, Scene } from "phaser";
 import { Fish } from "../../objects/Fish";
 import { Game } from "../../scenes/Game";
 import { Character } from "../../objects/Character";
+import { GameNetManager } from "../../managers/GameNetManager";
+import { UI } from "../../scenes/UI";
 
 export class PickUp extends GameObjects.Text{
     fish: Fish|null = null
@@ -16,10 +18,6 @@ export class PickUp extends GameObjects.Text{
         })
         this.visible = false;
         scene.add.existing(this)
-    }
-
-    setFish(fish:Fish){
-        this.fish = fish
     }
 
     update(character:Character){
@@ -45,5 +43,12 @@ export class PickUp extends GameObjects.Text{
 
         this.depth = character.depth + 1000
         this.setPosition(character.x - 25, character.y - 25)
+    }
+
+    pickFish(){
+        console.log(this.fish!.fishData.owner, GameNetManager.mainPlayer.id)
+        if(this.fish && this.fish.fishData.owner === GameNetManager.mainPlayer.id){
+            GameNetManager.sendPickUpFish(this.fish.fishData)
+        }
     }
 }

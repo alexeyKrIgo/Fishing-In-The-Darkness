@@ -61,7 +61,6 @@ export class Character extends Phaser.GameObjects.Sprite{
     }
 
     updateWalkingAnimation(animations: Array<string>, repeat: number, startFrame: number){
-        console.log(this.depth)
         if(this.direction.angle() >= this.PI/4 && this.direction.angle() < 3*this.PI/4){
             // Checks if animation is different of which is being played or the animation of "attack" has finished
             // but the attack button is still being pressed

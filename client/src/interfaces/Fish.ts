@@ -7,7 +7,7 @@ export interface IFish{
 
 export interface ToLootFish{
     owner: string
-    id: number
+    id: string
     asset: number
 }
 

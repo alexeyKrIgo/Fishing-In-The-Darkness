@@ -1,6 +1,7 @@
 import { Scene } from "phaser";
 import { InventoryRow } from "./InventoryRow";
 import { InventorySlot } from "./InventorySlot";
+import { IFish } from "../../interfaces/Fish";
 
 export class InventoryUI{
     inventoryRows = new Map<number, InventoryRow>()
@@ -23,5 +24,9 @@ export class InventoryUI{
             r.x = x
             r.y = y + k*(InventorySlot.slotWidth*r.scale + InventoryRow.gap)
         })
+    }
+
+    addFish(fishData: IFish){
+        this.inventoryRows.get(fishData.row)?.inventorySlots[fishData.column].addFish(fishData)
     }
 }
