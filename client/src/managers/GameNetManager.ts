@@ -141,11 +141,13 @@ export class GameNetManager{
         })
 
         this.room.onMessage("pf", (data: {client: string, toLootFish:ToLootFish})=>{
-            Game.loot.get(data.toLootFish.id)?.destroy()
-            Game.loot.delete(data.toLootFish.id)
-            if(data.client === this.room.sessionId){
-                this.mainPlayer.character.pickUp!.fish = null
-            }
+            this.scene.events.once(Scenes.Events.POST_UPDATE, ()=>{
+                Game.loot.get(data.toLootFish.id)?.destroy()
+                Game.loot.delete(data.toLootFish.id)
+                if(data.client === this.room.sessionId){
+                    this.mainPlayer.character.pickUp!.fish = null
+                }
+            })
         })
         
         this.room.onMessage("ppf", (fish:IFish)=>{

@@ -18,19 +18,19 @@ export class Fish extends Phaser.GameObjects.Image{
     GoUpTween(xf: number, yf: number){
         const newY = Math.RND.integerInRange(50, 100)
         const newX = Math.RND.integerInRange(-50, 50)
-        this.tween = this.scene.tweens.add({targets: this, props: {x: xf - newX, y: this.y - newY, scale: 0.8}, duration: 400, onComplete: ()=>this.GoDownTween()})
-        this.tween.play()
+        this.tween = this.scene?.tweens.add({targets: this, props: {x: xf - newX, y: this.y - newY, scale: 0.8}, duration: 400, onComplete: ()=>this.GoDownTween()})
+        this.tween?.play()
     }
 
     GoDownTween(){
         this.tween.destroy()
-        this.tween = this.scene.tweens.add({targets: this, props:{y: this.y + 18, scale: 0.6}, duration: 350, onComplete: () => this.setIdle()})
-        this.tween.play()
+        this.tween = this.scene?.tweens.add({targets: this, props:{y: this.y + 18, scale: 0.6}, duration: 350, onComplete: () => this.setIdle()})
+        this.tween?.play()
     }
 
     setIdle():void{
         this.tween.destroy()
-        this.tween = this.scene.tweens.add({targets: this, repeat: -1, props:{y: this.y - 5}, duration: 700, yoyo: true})
-        this.tween.play()
+        this.tween = this.scene?.tweens.add({targets: this, repeat: -1, props:{y: this.y - 5}, duration: 700, yoyo: true})
+        this.tween?.play()
     }
 }
