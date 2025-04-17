@@ -132,9 +132,9 @@ export class GameNetManager{
         })
 
         //Receive player caught fish
-        this.room.onMessage("gf", (data:{client:string, fish: ToLootFish})=>{
+        this.room.onMessage("gf", (data:{client:string, fish: ToLootFish, xOffset:number, yOffset:number})=>{
             const character = this.scene.characters.get(data.client)!
-            const fishObject = new Fish(this.scene, character.x, character.y, data.fish)
+            const fishObject = new Fish(this.scene, character.x, character.y, data.fish, data.xOffset, data.yOffset)
             Game.loot.set(fishObject.fishData.id, fishObject)
             fishObject.GoUpTween(character.x, character.y)
             this.scene.characters.get(data.client)!.catchFish()

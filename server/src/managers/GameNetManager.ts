@@ -3,6 +3,7 @@ import { Vector2 } from "../interfaces/Vector2";
 import { MyRoom } from "../rooms/MyRoom";
 import { World } from "../worlds/World";
 import { Fish, ToLootFish } from "../interfaces/Fish";
+import { getRandomInt } from "../utils/Maths";
 
 export class GameNetManager {
     static room: MyRoom
@@ -44,7 +45,7 @@ export class GameNetManager {
 
     static sendGotFish(client: Client, fish: ToLootFish){
         const character = this.world.characters.get(client.sessionId)
-        this.room.broadcast("gf", {client:client.sessionId, fish: fish})
+        this.room.broadcast("gf", {client:client.sessionId, fish: fish, xOffset: getRandomInt(-50, 50), yOffset: getRandomInt(50, 100)})
         character?.catchFish(client.sessionId)
     }
 

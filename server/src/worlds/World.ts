@@ -58,10 +58,13 @@ export class World{
     pickUpFish(client: Client, fishId: string){
         const character = this.characters.get(client.sessionId)
         const fish = this.charactersLoot.get(client.sessionId).get(fishId)!
-        const pickedFish = character.pickUpFish(client.auth._id, fish)
-        if(pickedFish){
-            GameNetManager.sendPickUpFish(fish, client)
-            GameNetManager.sendPrivatePickUpFish(pickedFish, client)
+        if(fish){
+            const pickedFish = character.pickUpFish(client.auth._id, fish)
+            if(pickedFish){
+                console.log(`${client.sessionId} got ${pickedFish.asset} at row: ${pickedFish.row} and column: ${pickedFish.column}`)
+                GameNetManager.sendPickUpFish(fish, client)
+                GameNetManager.sendPrivatePickUpFish(pickedFish, client)
+            }
         }
     }
 }
