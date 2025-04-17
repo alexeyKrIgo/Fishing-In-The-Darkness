@@ -41,9 +41,9 @@ export class MyRoom extends Room<MyRoomState> {
     async onJoin(client: Client, options: any) {
 
         //Generates inventory
-        const inventory = new SInventory()
         const inventoryDB = client.auth.inventory
-        this.state.inventories.set(client.auth._id, inventory)
+        
+        //this.state.inventories.set(client.auth._id, inventory)
 
         //Populate inventory with fishes
         const fishes = await DB.getInventory(client.auth._id)
@@ -53,7 +53,6 @@ export class MyRoom extends Room<MyRoomState> {
             sfish.owner = f.owner.toString()
             sfish.row = f.row
             sfish.column = f.column
-            inventory.fishes.push(sfish)
             savedFishes.push({owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset, saved: true})
         })
 
@@ -63,9 +62,15 @@ export class MyRoom extends Room<MyRoomState> {
         this.state.characters.set(client.sessionId, character.schema)
 
         console.log(client.sessionId, "joined!");
+
+        GameNetManager.sendInventory(client, savedFishes)
     }
 
     onLeave(client: Client, consented: boolean) {
+
+        //Save captured fishes in the database
+        const character = this.world.characters.get(client.sessionId)
+        DB.saveInventory(character.inventory.toSaveFishes)
 
         //Delete character from room's state and world
         this.state.characters.delete(client.sessionId)

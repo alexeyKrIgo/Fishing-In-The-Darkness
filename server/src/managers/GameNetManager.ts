@@ -38,6 +38,10 @@ export class GameNetManager {
         })
     }
 
+    static sendInventory(client: Client, fishes: Fish[]){
+        client.send("ivy", fishes)
+    }
+
     static sendBait(client: Client, fish:ToLootFish){
         this.world.characters.get(client.sessionId)?.tryCatchFish(client.sessionId)
         this.room.broadcast("bf", {id: client.sessionId, fish: fish})

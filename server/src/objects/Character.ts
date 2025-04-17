@@ -7,6 +7,7 @@ import { MyRoom } from "../rooms/MyRoom";
 import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
 import { InventoryDB } from "../interfaces/Inventory";
+import { GameNetManager } from "../managers/GameNetManager";
 
 export class Character{
     schema: SCharacter
@@ -33,10 +34,7 @@ export class Character{
         //Sets states
         this.states={idle: true, fishing: false, tryingCatchFish: false}
 
-        this.inventory = new Inventory(inventoryDB.size)
-        fishes.forEach(f=>{
-            this.inventory.inventorySlots[f.row][f.column] = f
-        })
+        this.inventory = new Inventory(inventoryDB.size, fishes)
 
         //Generates schema
         this.generateSchema(sessionId, room)
@@ -128,6 +126,7 @@ export class Character{
             if(slotIndex !== -1){
                 fish = {owner: owner, row: row, column: slotIndex, asset:toSaveFish.asset, saved: false}
                 this.inventory.inventorySlots[row][slotIndex] = fish
+                this.inventory.toSaveFishes.push(fish)
                 break;
             }
         }

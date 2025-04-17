@@ -64,6 +64,7 @@ export class World{
                 console.log(`${client.sessionId} got ${pickedFish.asset} at row: ${pickedFish.row} and column: ${pickedFish.column}`)
                 GameNetManager.sendPickUpFish(fish, client)
                 GameNetManager.sendPrivatePickUpFish(pickedFish, client)
+                this.charactersLoot.get(client.sessionId).delete(fishId)
             }
         }
     }

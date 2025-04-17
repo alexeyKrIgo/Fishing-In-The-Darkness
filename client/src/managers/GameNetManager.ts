@@ -120,6 +120,13 @@ export class GameNetManager{
 
     private static setCommands(){
 
+        //Player gets he's inventory
+        this.room.onMessage("ivy", (fishes:IFish[])=>{
+            fishes.forEach(f =>{
+                UI.inventoryUI.addFish(f)
+            })
+        })
+
         //Receive player fish
         this.room.onMessage("f", (id: string)=>{
             this.scene.characters.get(id)!.fish()
@@ -140,6 +147,8 @@ export class GameNetManager{
             this.scene.characters.get(data.client)!.catchFish()
         })
 
+
+        //Other palyers picked up their looted fishes
         this.room.onMessage("pf", (data: {client: string, toLootFish:ToLootFish})=>{
             this.scene.events.once(Scenes.Events.POST_UPDATE, ()=>{
                 Game.loot.get(data.toLootFish.id)?.destroy()
@@ -150,6 +159,7 @@ export class GameNetManager{
             })
         })
         
+        //Server accepted the pick fish to inventory request
         this.room.onMessage("ppf", (fish:IFish)=>{
             UI.inventoryUI.addFish(fish)
         })
