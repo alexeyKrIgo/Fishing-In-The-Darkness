@@ -3,7 +3,7 @@ import { MyRoomState } from "./schema/MyRoomState";
 import { Player } from "../interfaces/Player";
 import { World } from "../worlds/World";
 import { Character } from "../objects/Character";
-import { JWT } from "@colyseus/auth";
+import { JWT, JwtPayload } from "@colyseus/auth";
 import { GameNetManager } from "../managers/GameNetManager";
 import { DB } from "../db/DB";
 import { SInventory } from "../schemas/inventory/SInventory";
@@ -11,6 +11,7 @@ import { SFish } from "../schemas/inventory/SFish";
 import { Fish } from "../interfaces/Fish";
 
 export class MyRoom extends Room<MyRoomState> {
+    static loggedUsers = new Map<string, any>
     maxClients = 4;
     state = new MyRoomState();
     players: Player[]
@@ -21,8 +22,12 @@ export class MyRoom extends Room<MyRoomState> {
             return true
         }
         // validate the token
-        const userdata = await JWT.verify(context.token);
- 
+        const userdata:JwtPayload = await JWT.verify(context.token);
+
+        if(this.loggedUsers.get(userdata._id))
+            return false
+        else
+            this.loggedUsers.set(userdata._id, {})
         // return userdata
         return userdata;
     }
@@ -66,15 +71,18 @@ export class MyRoom extends Room<MyRoomState> {
         GameNetManager.sendInventory(client, savedFishes)
     }
 
-    onLeave(client: Client, consented: boolean) {
+    async onLeave(client: Client, consented: boolean) {
 
         //Save captured fishes in the database
         const character = this.world.characters.get(client.sessionId)
-        DB.saveInventory(character.inventory.toSaveFishes)
+        await DB.saveInventory(character.inventory.toSaveFishes)
 
         //Delete character from room's state and world
         this.state.characters.delete(client.sessionId)
         this.world.characters.delete(client.sessionId)
+
+        MyRoom.loggedUsers.delete(client.auth._id)
+
         console.log(client.sessionId, "left!");
     }
 
