@@ -1,6 +1,7 @@
 import { GameObjects, Scene, Math, Textures, Display, Input } from "phaser";
 import {UI as UIGlobals} from "../utils/AssetsGlobals"
 import { InventoryUI } from "../ui/inventory/InventoryUI";
+import { Chat } from "../ui/Chat";
 export class UI extends Scene{
 
     fps:GameObjects.Text
@@ -11,6 +12,10 @@ export class UI extends Scene{
 
     constructor(){
         super("UI")
+    }
+
+    preload(){
+        this.load.html("chat", "chat.html")
     }
 
     create(){
@@ -34,6 +39,8 @@ export class UI extends Scene{
         this.inventoryIcon = this.makeShader(UIGlobals.brightness, UIGlobals.inventoryIcon)
         this.inventorySlot.setInteractive()
         this.setTint(this.inventorySlot)
+
+        new Chat(this)
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{

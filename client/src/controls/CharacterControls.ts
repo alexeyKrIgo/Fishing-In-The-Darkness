@@ -53,6 +53,7 @@ export class CharacterControls{
         }
 
         if(Input.Keyboard.JustDown(this.keys.Space!)){
+            
             if(character.pickUp!.fish)
                 character.pickUp?.pickFish()
         }

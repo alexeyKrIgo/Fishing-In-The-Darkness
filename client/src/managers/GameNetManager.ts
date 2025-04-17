@@ -34,7 +34,6 @@ export class GameNetManager{
     static async login(nickname: string, password: string){
         try{
             const test = await this.colyseusSDK.auth.signInWithEmailAndPassword(nickname, password)
-            console.log(test)
         }
         catch(e){
             return Promise.reject()
@@ -42,7 +41,7 @@ export class GameNetManager{
     }
 
     static async connect(){
-        console.log(this.colyseusSDK.auth.token)
+        this.scene.game.scene.add("UI", new UI(), true);
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
         const userData = await this.colyseusSDK.auth.getUserData()
         const $ = getStateCallbacks(this.room)
