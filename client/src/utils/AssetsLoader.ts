@@ -38,7 +38,7 @@ export class AssetsLoader {
     static loadMap(scene: Scene) {
         scene.load.image(
             MAP.beach.beachTileSet,
-            `${this.mapURL}/tile-set-1.png`
+            `${this.mapURL}/tile-set-1-extruded.png`
         );
         scene.load.tilemapTiledJSON(
             MAP.beach.beachData,

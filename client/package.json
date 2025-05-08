@@ -9,6 +9,7 @@
     "preview": "vite preview"
   },
   "devDependencies": {
+    "tile-extruder": "^2.1.1",
     "typescript": "~5.7.2",
     "vite": "^6.2.0"
   },

@@ -1,10 +1,9 @@
-import { Math, Scene } from "phaser";
+import { Scene } from "phaser";
 import { AssetsLoader } from "../utils/AssetsLoader";
 import { GHOST, MAP } from "../utils/AssetsGlobals";
 import { Character } from "../objects/Character";
 import { CharacterControls } from "../controls/CharacterControls";
 import { Ghost } from "../objects/Ghost";
-import { UI } from "./UI";
 import { GameNetManager } from "../managers/GameNetManager";
 import { Fish } from "../objects/Fish";
 
@@ -45,7 +44,7 @@ export class Game extends Scene {
     createPlayer(character: Character){
         this.cameras.main.zoom = 4;
         this.cameras.main.centerOn(character.x, character.y)
-        this.cameras.main.startFollow(character, true)
+        this.cameras.main.startFollow(character)
         this.cameras.main.setBounds(0,0, 560, 240)
 
         CharacterControls.generateCharacterMoveControl(this.input, character)
@@ -62,7 +61,7 @@ export class Game extends Scene {
         const map = this.make.tilemap({ key: MAP.beach.beachData });
         const tiles = map.addTilesetImage(
             MAP.beach.tileset,
-            MAP.beach.beachTileSet
+            MAP.beach.beachTileSet, 16, 16, 1, 2
         ) as Phaser.Tilemaps.Tileset;
 
         map.createLayer(MAP.beach.ground, tiles, 0, 0);
