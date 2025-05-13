@@ -6,6 +6,7 @@ import { RodData } from "../interfaces/FishingRod";
 import { GameNetManager } from "../managers/GameNetManager";
 import { ToLootFish } from "../interfaces/Fish";
 import { PickUp } from "../ui/actions/PickUp";
+import { Game } from "../scenes/Game";
 
 export class Character extends Phaser.GameObjects.Sprite{
     animations: ICharacterAnimations;
@@ -36,7 +37,7 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.depth = this.y
         this.fishingRod.depth = this.y
         if(this.pickUp){
-            this.pickUp.update(this)
+            this.pickUp.update(this, this.scene as Game)
         }
         if(!this.states.idle && !this.states.fishing){
 

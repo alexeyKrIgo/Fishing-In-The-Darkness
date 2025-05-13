@@ -6,7 +6,6 @@ import { Character } from "../objects/Character";
 import { JWT, JwtPayload } from "@colyseus/auth";
 import { GameNetManager } from "../managers/GameNetManager";
 import { DB } from "../db/DB";
-import { SInventory } from "../schemas/inventory/SInventory";
 import { SFish } from "../schemas/inventory/SFish";
 import { Fish } from "../interfaces/Fish";
 

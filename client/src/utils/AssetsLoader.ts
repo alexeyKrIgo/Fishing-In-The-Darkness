@@ -8,6 +8,7 @@ export class AssetsLoader {
     private static mapURL = "map";
     private static basicRodURL = "fishing-rods/basic-rod"
     private static shadersURL = "shaders/"
+    public static loaded = false;
 
     static loadInventoryUI(scene: Scene){
         scene.load.image(UI.inventorySlot, `${this.uiInventoryURL}/slot.png`)

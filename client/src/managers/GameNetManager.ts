@@ -91,11 +91,12 @@ export class GameNetManager{
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)
 
                     //Sync states
-                    characterObject.states.idle = character.states.idle
+                    /*characterObject.states.idle = character.states.idle
                     characterObject.states.fishing = character.states.fishing;
-                    characterObject.states.tryingCatchFish = character.states.tryingCatchFish
+                    characterObject.states.tryingCatchFish = character.states.tryingCatchFish*/
                 }
                 else{
+                    //Server reconciliation
                     const distance = new Math.Vector2(characterObject.x, characterObject.y).distance({x: character.x, y: character.y})
                     if(distance > 50){
                         characterObject.x = character.x
@@ -119,7 +120,7 @@ export class GameNetManager{
 
     private static setCommands(){
 
-        //Player gets he's inventory
+        //Player gets his inventory
         this.room.onMessage("ivy", (fishes:IFish[])=>{
             fishes.forEach(f =>{
                 UI.inventoryUI.addFish(f)
@@ -128,6 +129,7 @@ export class GameNetManager{
 
         //Receive player fish
         this.room.onMessage("f", (id: string)=>{
+            console.log("hello")
             this.scene.characters.get(id)!.fish()
             console.log("fishing: " + id)
         })
@@ -141,7 +143,7 @@ export class GameNetManager{
         this.room.onMessage("gf", (data:{client:string, fish: ToLootFish, xOffset:number, yOffset:number})=>{
             const character = this.scene.characters.get(data.client)!
             const fishObject = new Fish(this.scene, character.x, character.y, data.fish, data.xOffset, data.yOffset)
-            Game.loot.set(fishObject.fishData.id, fishObject)
+            this.scene.loot.set(fishObject.fishData.id, fishObject)
             fishObject.GoUpTween(character.x, character.y)
             this.scene.characters.get(data.client)!.catchFish()
         })
@@ -150,8 +152,8 @@ export class GameNetManager{
         //Other palyers picked up their looted fishes
         this.room.onMessage("pf", (data: {client: string, toLootFish:ToLootFish})=>{
             this.scene.events.once(Scenes.Events.POST_UPDATE, ()=>{
-                Game.loot.get(data.toLootFish.id)?.destroy()
-                Game.loot.delete(data.toLootFish.id)
+                this.scene.loot.get(data.toLootFish.id)?.destroy()
+                this.scene.loot.delete(data.toLootFish.id)
                 if(data.client === this.room.sessionId){
                     this.mainPlayer.character.pickUp!.fish = null
                 }
@@ -190,6 +192,15 @@ export class GameNetManager{
 
     static sendPickUpFish(fish: ToLootFish){
         this.room.send("pf", fish)
+    }
+
+    static disconnect(){
+        GameNetManager.room.leave().then(()=>{
+            GameNetManager.colyseusSDK.auth.signOut()
+            console.log(GameNetManager.scene.loot)
+            GameNetManager.scene.scene.start("Login")
+            GameNetManager.scene.scene.remove("UI")
+        })
     }
 
     /*static receivedFish(fish: IFish){

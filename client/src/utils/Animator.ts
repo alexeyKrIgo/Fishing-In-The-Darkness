@@ -1,6 +1,12 @@
 import { Scene } from "phaser";
 
 export class Animator {
+    static animations = {
+        ghost: {
+            fishing: false,
+            movement: false
+        }
+    }
     static generateCharacterAnimations(
         scene: Scene,
         name: string,

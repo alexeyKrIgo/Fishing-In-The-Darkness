@@ -1,9 +1,8 @@
 import { GameObjects, Math, Scene } from "phaser";
 import { Fish } from "../../objects/Fish";
-import { Game } from "../../scenes/Game";
 import { Character } from "../../objects/Character";
 import { GameNetManager } from "../../managers/GameNetManager";
-import { UI } from "../../scenes/UI";
+import { Game } from "../../scenes/Game";
 
 export class PickUp extends GameObjects.Text{
     fish: Fish|null = null
@@ -20,10 +19,10 @@ export class PickUp extends GameObjects.Text{
         scene.add.existing(this)
     }
 
-    update(character:Character){
+    update(character:Character, gameScene: Game){
         let fish: Fish|null = null
 
-        Game.loot.forEach(l => {
+        gameScene.loot.forEach(l => {
             if(!fish && Math.Distance.Between(character.x, character.y + this.characterOffset, l.x, l.y) < 20){
                 fish = l
             }

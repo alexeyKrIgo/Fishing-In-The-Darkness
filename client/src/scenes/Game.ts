@@ -12,7 +12,7 @@ export class Game extends Scene {
     seaLimit: number
     test = true
     testTween: Phaser.Tweens.Tween
-    static loot: Map<string, Fish> = new Map<string, Fish>()
+    loot: Map<string, Fish>
     
     constructor() {
         super("Game");
@@ -20,18 +20,25 @@ export class Game extends Scene {
 
     preload() {
         this.load.setPath("assets");
-        AssetsLoader.loadInventoryUI(this)
-        AssetsLoader.loadLoot(this)
-        AssetsLoader.loadMap(this);
-        AssetsLoader.loadGhost(this)
-        AssetsLoader.loadBasicRod(this)
-        AssetsLoader.loadUIShaders(this)
+        if(!AssetsLoader.loaded){
+            AssetsLoader.loadInventoryUI(this)
+            AssetsLoader.loadLoot(this)
+            AssetsLoader.loadMap(this);
+            AssetsLoader.loadGhost(this)
+            AssetsLoader.loadBasicRod(this)
+            AssetsLoader.loadUIShaders(this)
+            AssetsLoader.loaded = true
+        }
     }
 
     async create() {
-        Ghost.generateAnimations(this, GHOST.ghostIdle)
+        if(!Ghost.animationsCreated){
+            Ghost.generateAnimations(this, GHOST.ghostIdle)
+            Ghost.animationsCreated = true
+        }
         this.generateMap();
         this.characters = new Map<string, Character>()
+        this.loot = new Map<string, Fish>()
         GameNetManager.scene = this
         await GameNetManager.connect()
         console.log(this.cameras.main.width)

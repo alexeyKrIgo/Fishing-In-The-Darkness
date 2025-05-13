@@ -1,4 +1,3 @@
-import { Client } from "colyseus";
 import { ICharacterStates } from "../interfaces/Character";
 import { Fish, ToLootFish } from "../interfaces/Fish";
 import { Vector2 } from "../interfaces/Vector2";
@@ -7,7 +6,6 @@ import { MyRoom } from "../rooms/MyRoom";
 import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
 import { InventoryDB } from "../interfaces/Inventory";
-import { GameNetManager } from "../managers/GameNetManager";
 
 export class Character{
     schema: SCharacter
@@ -106,7 +104,6 @@ export class Character{
         this.schema.states.tryingCatchFish = true
         console.log(`${id} trying to catch the fish`)
     }
-
 
     catchFish(id: string){
         this.states.idle = true

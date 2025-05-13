@@ -2,6 +2,8 @@ import { GameObjects, Scene, Math, Textures, Display, Input } from "phaser";
 import {UI as UIGlobals} from "../utils/AssetsGlobals"
 import { InventoryUI } from "../ui/inventory/InventoryUI";
 import { Chat } from "../ui/Chat";
+import { Button } from "../ui/Button";
+import { GameNetManager } from "../managers/GameNetManager";
 export class UI extends Scene{
 
     fps:GameObjects.Text
@@ -9,6 +11,8 @@ export class UI extends Scene{
     static inventoryUI: InventoryUI
     inventorySlot: GameObjects.Shader
     inventoryIcon: GameObjects.Shader
+    logout: Button
+    static chat:Chat 
 
     constructor(){
         super("UI")
@@ -34,13 +38,16 @@ export class UI extends Scene{
             )
         )
 
+        //Generate logout button
+        this.logout = new Button(this, GameNetManager.disconnect);
+
         //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)
         this.inventoryIcon = this.makeShader(UIGlobals.brightness, UIGlobals.inventoryIcon)
         this.inventorySlot.setInteractive()
         this.setTint(this.inventorySlot)
 
-        new Chat(this)
+        UI.chat = new Chat(this)
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{
@@ -48,7 +55,7 @@ export class UI extends Scene{
         const shader = this.add.shader(
             shaderKey,
             40,
-            100,
+            140,
             32,
             32,
             [texture]

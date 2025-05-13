@@ -16,6 +16,9 @@ export class Ghost extends Character{
         },
         cast: GHOST.castRod, fishingIdle: GHOST.fishingIdle, bait: GHOST.bait, catch: GHOST.catchFish
     }
+
+    static animationsCreated = false
+    
     constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates){
         super(scene, texture, x, y, direction, states, {idle: {
             front: "ghostIdleFront", 

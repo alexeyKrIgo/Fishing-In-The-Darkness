@@ -1,6 +1,7 @@
 import { Input, Math } from "phaser";
 import { Character } from "../objects/Character";
 import { GameNetManager } from "../managers/GameNetManager";
+import { UI } from "../scenes/UI";
 
 export class CharacterControls{
     static mouseLeft = false;
@@ -20,6 +21,8 @@ export class CharacterControls{
     static generateCharacterMoveControl(input: Input.InputPlugin, character:Character){
         input.on("pointerdown", (p:Input.Pointer) => {
             if(p.button === 0){
+                UI.chat.input.blur()
+                UI.chat.displayChat.style.overflow = "hidden"
                 this.mouseLeft = true;
                 character.move(new Math.Vector2(input.mousePointer.worldX, input.mousePointer.worldY))
                 GameNetManager.sendWalk({x: character.direction.x, y: character.direction.y})
