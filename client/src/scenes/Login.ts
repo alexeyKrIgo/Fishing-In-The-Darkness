@@ -3,6 +3,9 @@ import { GameNetManager } from "../managers/GameNetManager";
 import { Game } from "./Game";
 
 export class Login extends Scene{
+    
+    state: "login"|"register" = "login"
+
     constructor(){
         super("Login")
     }

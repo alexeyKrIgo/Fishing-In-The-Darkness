@@ -39,7 +39,7 @@ export class UI extends Scene{
         )
 
         //Generate logout button
-        this.logout = new Button(this, GameNetManager.disconnect);
+        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 150, 60);
 
         //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)

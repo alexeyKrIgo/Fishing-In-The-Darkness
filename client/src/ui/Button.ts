@@ -3,21 +3,29 @@ import { GameNetManager } from "../managers/GameNetManager";
 
 export class Button extends GameObjects.Rectangle{
 
+    action: Function
     text: GameObjects.Text
-    brightness = 1
-    baseFillCoor = 0x73442f
-    baseStrokeColor = 0xb06948
+    brightness:number
+    baseFillColor:number
+    baseStrokeColor:number
 
-    constructor(scene: Scene, action:Function){
-        super(scene, 4, 4, 150, 60,  0x73442f)
+    constructor(scene: Scene, action:Function, brightness:number, baseFillColor:number, baseStrokeColor: number,
+        x: number, y: number, width: number, height: number
+    ){
+        super(scene, x, y, width, height,  baseFillColor)
         this.setOrigin(0,0)
-        this.setStrokeStyle(4, 0xb06948)
+        this.setStrokeStyle(4, baseStrokeColor)
         this.scene.add.existing(this)
         this.setInteractive()
 
+        this.brightness = brightness
+        this.baseFillColor = baseFillColor
+        this.baseStrokeColor = baseStrokeColor
+        this.action = action
+
         this.on("pointerover", ()=>this.changeBrightness(1.2), this)
         this.on("pointerout", ()=>this.changeBrightness(1), this)
-        this.on("pointerdown", ()=>action(), GameNetManager)
+        this.on("pointerdown", ()=>this.addAction(), GameNetManager)
 
         this.text = new GameObjects.Text(this.scene, this.x + this.width/2, this.y + this.height/2, 
             "0", { fontFamily: 'InTheDarkness', fontSize: 20});
@@ -26,8 +34,12 @@ export class Button extends GameObjects.Rectangle{
         this.scene.add.existing(this.text)
     }
 
+    addAction(){
+        this.action()
+    }
+
     changeBrightness(brightness: number){
-        this.setFillStyle(this.getBirghtenedColor(this.baseFillCoor, brightness))
+        this.setFillStyle(this.getBirghtenedColor(this.baseFillColor, brightness))
         this.setStrokeStyle(4, this.getBirghtenedColor(this.baseStrokeColor, brightness))
     }
 
