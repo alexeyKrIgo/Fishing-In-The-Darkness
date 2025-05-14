@@ -2,7 +2,7 @@ import { GameObjects, Scene, Math, Textures, Display, Input } from "phaser";
 import {UI as UIGlobals} from "../utils/AssetsGlobals"
 import { InventoryUI } from "../ui/inventory/InventoryUI";
 import { Chat } from "../ui/Chat";
-import { Button } from "../ui/Button";
+import { Button } from "../ui/buttons/Button";
 import { GameNetManager } from "../managers/GameNetManager";
 export class UI extends Scene{
 
@@ -39,7 +39,7 @@ export class UI extends Scene{
         )
 
         //Generate logout button
-        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 150, 60);
+        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 150, 60, 20, "Logout", null);
 
         //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)

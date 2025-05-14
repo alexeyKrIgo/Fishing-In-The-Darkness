@@ -3,24 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="login.css">
     <title>Document</title>
 </head>
 <body>
-    <h1 style="color:white">Fishing in the Darkness</h1>
-    <div style="text-align: center;">
+    <h1 style="color:white" id="title">Fishing in the Darkness</h1>
+    <div style="text-align: center;" id="loginPanel">
         <div>
-            <label for="username" style="color: white">Nickname:</label>
+            <label for="emailLogin" style="color: white">Email:</label>
+            <input type="text" id="emailLogin" style="font-family: InTheDarkness;">
+        </div>
+        <div style="margin-top: 20px;">
+            <label for="passwordLogin" style="color: white;">Password: </label>
+            <input type="password" id="passwordLogin" style="font-family: InTheDarkness;">
+        </div>
+    </div>
+    <div style="text-align: center; display: none;" id="registerPanel">
+        <div>
+            <label for="nickname" style="color: white">Nickname:</label>
             <input type="text" id="nickname" style="font-family: InTheDarkness;">
         </div>
         <div style="margin-top: 20px;">
-            <label for="password" style="color: white;">Password: </label>
-            <input type="password" id="password" style="font-family: InTheDarkness;">
+            <label for="emailRegister" style="color: white;">Email: </label>
+            <input type="email" id="emailRegister" style="font-family: InTheDarkness;">
         </div>
         <div style="margin-top: 20px;">
-            <button id="login" style="font-family: InTheDarkness; font-size: 20px;">LOGIN</button>
+            <label for="passwordRegister" style="color: white;">Password: </label>
+            <input type="password" id="passwordRegister" style="font-family: InTheDarkness;" minlength="8">
         </div>
-        <div style="margin-top: 20px">
-            <button id="register" style="font-family: InTheDarkness; font-size: 10px">REGISTER</button>
+        <div style="margin-top: 20px;">
+            <label for="confirmPassword" style="color: white;">Confirm Password: </label>
+            <input type="password" id="confirmPassword" style="font-family: InTheDarkness;">
         </div>
     </div>
 </body>

@@ -1,5 +1,5 @@
 import { GameObjects, Scene } from "phaser";
-import { GameNetManager } from "../managers/GameNetManager";
+import { GameNetManager } from "../../managers/GameNetManager";
 
 export class Button extends GameObjects.Rectangle{
 
@@ -10,7 +10,7 @@ export class Button extends GameObjects.Rectangle{
     baseStrokeColor:number
 
     constructor(scene: Scene, action:Function, brightness:number, baseFillColor:number, baseStrokeColor: number,
-        x: number, y: number, width: number, height: number
+        x: number, y: number, width: number, height: number, fontSize: number, text:string, context: any
     ){
         super(scene, x, y, width, height,  baseFillColor)
         this.setOrigin(0,0)
@@ -25,12 +25,12 @@ export class Button extends GameObjects.Rectangle{
 
         this.on("pointerover", ()=>this.changeBrightness(1.2), this)
         this.on("pointerout", ()=>this.changeBrightness(1), this)
-        this.on("pointerdown", ()=>this.addAction(), GameNetManager)
+        this.on("pointerdown", action, context)
 
         this.text = new GameObjects.Text(this.scene, this.x + this.width/2, this.y + this.height/2, 
-            "0", { fontFamily: 'InTheDarkness', fontSize: 20});
+            "0", { fontFamily: 'InTheDarkness', fontSize: fontSize});
         this.text.setOrigin(0.5, 0.5)
-        this.text.setText("Logout")
+        this.text.setText(text)
         this.scene.add.existing(this.text)
     }
 
