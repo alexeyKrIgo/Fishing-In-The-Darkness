@@ -166,6 +166,10 @@ export class GameNetManager{
         this.room.onMessage("ppf", (fish:IFish)=>{
             UI.inventoryUI.addFish(fish)
         })
+
+        this.room.onMessage("msg", (data:{id:string, message:string})=>{
+            UI.chat.writeMessage(data.message)
+        })
     }
 
     /*private static receiveWalk(id: string, direction: Vector2){
@@ -194,6 +198,10 @@ export class GameNetManager{
 
     static sendPickUpFish(fish: ToLootFish){
         this.room.send("pf", fish)
+    }
+
+    static sendMessage(message: string){
+        this.room.send("msg", message)
     }
 
     static disconnect(){

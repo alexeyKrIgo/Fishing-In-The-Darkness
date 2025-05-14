@@ -24,12 +24,12 @@ export class Chat{
     }
 
     writePlayersMessage(){
-        this.displayChat.innerText = this.displayChat.innerText + `\n ${this.input.value}`
-        this.displayChat.scrollBy(0, this.displayChat.scrollHeight)
+        GameNetManager.sendMessage(this.input.value)
         this.input.value = ""
     }
 
     writeMessage(message: string){
-
+        this.displayChat.innerText = this.displayChat.innerText + `\n ${message} \n`
+        this.displayChat.scrollBy(0, this.displayChat.scrollHeight)
     }
 }

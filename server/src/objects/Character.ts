@@ -20,7 +20,7 @@ export class Character{
     fishesCounter = 0
     inventory: Inventory
 
-    constructor(room: MyRoom, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[]){
+    constructor(room: MyRoom, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[], nickName:string){
 
         //Sets position
         this.x = getRandomInt(100, 200)
@@ -35,10 +35,10 @@ export class Character{
         this.inventory = new Inventory(inventoryDB.size, fishes)
 
         //Generates schema
-        this.generateSchema(sessionId, room)
+        this.generateSchema(sessionId, nickName, room)
     }
 
-    generateSchema(sessionId: string, room: MyRoom){
+    generateSchema(sessionId: string, nickName: string, room: MyRoom){
         const characterSchema = new SCharacter();
 
         //Sets schema position
@@ -53,6 +53,9 @@ export class Character{
         characterSchema.states.fishing = false;
         characterSchema.states.idle = true;
         characterSchema.states.tryingCatchFish = false
+
+        //Sets schema nickname
+        characterSchema.nickName = nickName
 
         //Asigns schema to object and room
         this.schema = characterSchema

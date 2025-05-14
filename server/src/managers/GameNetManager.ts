@@ -36,6 +36,12 @@ export class GameNetManager {
         this.room.onMessage("pf", (client, data: ToLootFish)=>{
             this.world.pickUpFish(client, data.id)
         })
+
+        //Receive players message
+        this.room.onMessage("msg", (client, message: string)=>{
+            console.log(message)
+            this.room.broadcast("msg", {id: client.sessionId, message: `${world.characters.get(client.sessionId)!.schema.nickName}: ${message}`})
+        })
     }
 
     static sendInventory(client: Client, fishes: Fish[]){
