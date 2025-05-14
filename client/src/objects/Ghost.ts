@@ -19,13 +19,13 @@ export class Ghost extends Character{
 
     static animationsCreated = false
     
-    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates){
+    constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates, nickName:string){
         super(scene, texture, x, y, direction, states, {idle: {
             front: "ghostIdleFront", 
             right: "ghostIdleRight",
             left: "ghostIdleLeft",
             back: "ghostIdleBack"
-        }, cast: GHOST.castRod, fishingIdle: GHOST.fishingIdle, bait: GHOST.bait, catch: GHOST.catchFish}, BASICROD)
+        }, cast: GHOST.castRod, fishingIdle: GHOST.fishingIdle, bait: GHOST.bait, catch: GHOST.catchFish}, BASICROD, nickName)
     }
 
     static generateAnimations(scene: Scene, texture: string){

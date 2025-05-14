@@ -7,4 +7,5 @@ export class SCharacter extends Schema{
     @type("number") y: number
     @type(SVector2) direction = new SVector2()
     @type(SCharacterStates) states = new SCharacterStates();
+    @type("string") nickName: string
 }

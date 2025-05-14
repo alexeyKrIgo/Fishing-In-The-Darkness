@@ -9,6 +9,7 @@ import { PickUp } from "../ui/actions/PickUp";
 import { Game } from "../scenes/Game";
 
 export class Character extends Phaser.GameObjects.Sprite{
+    nickname: string
     animations: ICharacterAnimations;
     speed = 0.035; 
     direction: Math.Vector2;
@@ -19,7 +20,7 @@ export class Character extends Phaser.GameObjects.Sprite{
     pickUp: PickUp|null = null
 
     constructor(scene: Scene, texture: string, x: number, y:number, direction: Math.Vector2, states: ICharacterStates, animations: ICharacterAnimations,
-        rodData: RodData
+        rodData: RodData, nickName: string
     ){
         super(scene, x, y, texture)
         this.animations = animations
@@ -31,6 +32,8 @@ export class Character extends Phaser.GameObjects.Sprite{
         scene.add.existing(this)
 
         this.fishingRod = new FishingRod(scene, rodData.cast, x, y, rodData)
+
+        this.nickname = nickName
     }
 
     update(delta: number, seaLimit: number){

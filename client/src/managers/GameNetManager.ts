@@ -50,7 +50,8 @@ export class GameNetManager{
         //Adds a new character to the game scene
         $(this.room.state).characters.onAdd((character:SCharacter, sessionId:string)=>{
             let characterObject = new Ghost(this.scene, GHOST.ghostIdle, character.x, character.y,
-                new Math.Vector2(character.direction.x, character.direction.y), character.states
+                new Math.Vector2(character.direction.x, character.direction.y), character.states,
+                character.nickName
             )
             //Creates main player
             if(sessionId == this.room.sessionId){
