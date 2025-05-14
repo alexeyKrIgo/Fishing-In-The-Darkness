@@ -9,8 +9,8 @@ export class DB{
         console.log("Connected to database")
     }
 
-    static async regiser(email: string, password: string){
-        const user = new User({email: email, password: password, inventory: {size:3, full: false}})
+    static async regiser(nickname: string, email: string, password: string){
+        const user = new User({nickname: nickname, email: email, password: password, inventory: {size:3, full: false}})
         await user.save()
     }
 

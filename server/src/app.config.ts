@@ -12,11 +12,11 @@ import { DB } from "./db/DB";
 
 auth.settings.onFindUserByEmail = async function (email) {
     const user = await DB.login(email)
-    return {_id: user._id, email: user.email, password: user.password, inventory: user.inventory}
+    return {_id: user._id, nickname: user.nickname, email: user.email, password: user.password, inventory: user.inventory}
 }
 
 auth.settings.onRegisterWithEmailAndPassword = async function (email, password, options) {
-    await DB.regiser(email, password)
+    await DB.regiser(options.nickname, email, password)
     return {email:email};
 }
 

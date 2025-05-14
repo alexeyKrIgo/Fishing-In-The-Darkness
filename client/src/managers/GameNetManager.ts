@@ -21,13 +21,14 @@ export class GameNetManager{
     static colyseusSDK = new Client("ws://localhost:2567");
     static blocked = false
     
-    static async register(nickname: string, password: string){
+    static async register(nickname: string, email: string, password: string){
         try {
-            const userdata = await this.colyseusSDK.auth.registerWithEmailAndPassword(nickname, password);
+            const userdata = await this.colyseusSDK.auth.registerWithEmailAndPassword(email, password, {nickname});
             console.log(userdata);
          
         } catch (e:any) {
             console.error(e.message);
+            return Promise.reject()
         }
     }
 
