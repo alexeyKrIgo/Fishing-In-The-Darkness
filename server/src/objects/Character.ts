@@ -8,6 +8,7 @@ import { getRandomInt } from "../utils/Maths";
 import { InventoryDB } from "../interfaces/Inventory";
 
 export class Character{
+    dbId: string
     schema: SCharacter
     x: number
     y: number
@@ -20,7 +21,7 @@ export class Character{
     fishesCounter = 0
     inventory: Inventory
 
-    constructor(room: MyRoom, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[], nickName:string){
+    constructor(room: MyRoom, dbId:string, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[], nickName:string){
 
         //Sets position
         this.x = getRandomInt(100, 200)
@@ -36,6 +37,7 @@ export class Character{
 
         //Generates schema
         this.generateSchema(sessionId, nickName, room)
+        this.dbId = dbId
     }
 
     generateSchema(sessionId: string, nickName: string, room: MyRoom){

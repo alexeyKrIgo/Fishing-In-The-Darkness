@@ -22,7 +22,6 @@ export class MyRoom extends Room<MyRoomState> {
         }
         // validate the token
         const userdata:JwtPayload = await JWT.verify(context.token);
-        console.log(userdata)
 
         if(this.loggedUsers.get(userdata._id))
             return false
@@ -62,7 +61,7 @@ export class MyRoom extends Room<MyRoomState> {
         })
 
         //generates character
-        const character = new Character(this, client.sessionId, inventoryDB, savedFishes, client.auth.nickname)
+        const character = new Character(this, client.auth._id, client.sessionId, inventoryDB, savedFishes, client.auth.nickname)
         this.world.addCharacter(client, character)
         this.state.characters.set(client.sessionId, character.schema)
 

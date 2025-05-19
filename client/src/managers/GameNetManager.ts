@@ -51,7 +51,7 @@ export class GameNetManager{
         $(this.room.state).characters.onAdd((character:SCharacter, sessionId:string)=>{
             let characterObject = new Ghost(this.scene, GHOST.ghostIdle, character.x, character.y,
                 new Math.Vector2(character.direction.x, character.direction.y), character.states,
-                character.nickName
+                character.nickName, sessionId
             )
             //Creates main player
             if(sessionId == this.room.sessionId){
@@ -60,6 +60,9 @@ export class GameNetManager{
                 this.mainPlayer.character = characterObject
                 this.mainPlayer.character.pickUp = new PickUp(this.scene)
                 this.scene.createPlayer(characterObject)
+            }
+            else{
+                characterObject.addRightClickOptions()
             }
 
             //Syn on join current states
@@ -88,6 +91,9 @@ export class GameNetManager{
                     characterObject.y = Math.Linear(characterObject.y, character.y, interpolationFactor)
                     characterObject.fishingRod.x = characterObject.x
                     characterObject.fishingRod.y = characterObject.y
+                    
+                    //Sync characters ui
+                    characterObject.updateCharacterUI()
 
                     //Direction sync
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)

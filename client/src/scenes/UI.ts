@@ -75,21 +75,21 @@ export class UI extends Scene{
         }, this)
 
         image.on("pointerdown", (pointer:Input.Pointer)=>{
-            if(pointer.button === 0){
+            if(pointer.button == 0){
                 this.inventorySlot.setUniform("brightness.value", 0.6);
                 this.inventoryIcon.setUniform("brightness.value", 0.6);
                 this.inventoryIcon!.scene.time.addEvent({
                     delay: 100,
                     callbackScope: this,
                     callback: ()=>{
-                        this.inventoryIcon.setUniform("brightness.value", 1);
+                        this.inventoryIcon.setUniform("brightness.value", 1.2);
                         UI.inventoryUI.inventoryRows.forEach(r => r.setVisible(!r.visible))
                     }
                 })
                 this.inventorySlot.scene.time.addEvent({
                     delay: 100,
                     callbackScope: this,
-                    callback: ()=>this.inventorySlot.setUniform("brightness.value", 1)
+                    callback: ()=>this.inventorySlot.setUniform("brightness.value", 1.2)
                 })
             }
         }, this)

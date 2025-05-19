@@ -1,5 +1,4 @@
 import { GameObjects, Scene } from "phaser";
-import { GameNetManager } from "../../managers/GameNetManager";
 
 export class Button extends GameObjects.Rectangle{
 
@@ -38,6 +37,11 @@ export class Button extends GameObjects.Rectangle{
         this.action()
     }
 
+    click(){
+        this.changeBrightness(0.8)
+        this.scene.time.addEvent({delay: 100, callbackScope: this, callback: ()=>this.changeBrightness(1.2)})
+    }
+
     changeBrightness(brightness: number){
         this.setFillStyle(this.getBirghtenedColor(this.baseFillColor, brightness))
         this.setStrokeStyle(4, this.getBirghtenedColor(this.baseStrokeColor, brightness))
@@ -53,5 +57,20 @@ export class Button extends GameObjects.Rectangle{
         blue = Math.min(255, Math.max(0, Math.round(blue * brightness)));
 
         return (red << 16) | (green << 8) | blue;
+    }
+
+    changePosition(x:number, y: number){
+        this.setPosition(x,y)
+        this.text.setPosition(x, y)
+    }
+
+    changeVisibility(visible: boolean){
+        this.visible = visible,
+        this.text.visible = visible
+    }
+
+    destroyButton(){
+        this.text.destroy()
+        this.destroy()
     }
 }

@@ -152,25 +152,4 @@ export class Login extends Scene{
         this.swapToLoginButton.visible = register;
         this.swapToLoginButton.text.visible = register
     }
-    /*create(){
-        if(!localStorage.getItem("colyseus-auth-token")){
-            const domElement = this.add.dom(1920/2, 1080/2).createFromCache("login")
-            domElement.scale = 2
-            const nickname = domElement.getChildByID("nickname") as HTMLInputElement
-            const password = domElement.getChildByID("password") as HTMLInputElement
-            document.getElementById("register")?.addEventListener("click", ()=>
-                {
-                    GameNetManager.register(nickname.value, password.value)
-                }
-            )
-            domElement.getChildByID("login")?.addEventListener("click", ()=>
-                {   
-                    GameNetManager.login(nickname.value, password.value).then(()=>this.scene.start("Game", new Game()))
-                }
-            )
-        }
-        else{
-            this.scene.start("Game", new Game())
-        }
-    }*/
 }

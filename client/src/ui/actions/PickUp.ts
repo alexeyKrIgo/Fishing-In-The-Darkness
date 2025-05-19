@@ -41,7 +41,7 @@ export class PickUp extends GameObjects.Text{
             this.visible = false
 
         this.depth = character.depth + 1000
-        this.setPosition(character.x - 25, character.y - 25)
+        this.setPosition(character.x - 25, character.y - 30)
     }
 
     pickFish(){

@@ -4,4 +4,5 @@ export class Player{
     id: string;
     name: string;
     character:Character
+    static selectedPlayer: Character|null = null
 }
