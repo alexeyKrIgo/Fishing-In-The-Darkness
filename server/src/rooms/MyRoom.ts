@@ -75,7 +75,7 @@ export class MyRoom extends Room<MyRoomState> {
 
         //Save captured fishes in the database
         const character = this.world.characters.get(client.sessionId)
-        await DB.saveInventory(character.inventory.toSaveFishes)
+        await DB.saveUnsavedFishes(character.inventory.toSaveFishes)
 
         //Delete character from room's state and world
         this.state.characters.delete(client.sessionId)

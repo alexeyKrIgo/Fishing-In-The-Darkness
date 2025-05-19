@@ -24,10 +24,38 @@ export class DB{
         return fishes
     }
 
-    static async saveInventory(fishes: IFish[]){
+    static async saveUnsavedFishes(fishes: IFish[]){
+        const dbFishes: mongoose.Document<unknown, any, any>[] = []
+        let owner = fishes[0].owner
         fishes.forEach(f =>{
             let fish = new Fish({owner: f.owner, row: f.row, column: f.column, asset: f.asset})
-            fish.save()
+            dbFishes.push(fish)
         })
+        try{
+            await Fish.bulkSave(dbFishes)
+        }
+        catch(error: any){
+            console.error(`Error while saving fishes for ${owner}: ` + error.message)
+        }
+    }
+
+    static async tradeFishes(hostFish:IFish, guestFish:IFish){
+
+        try{
+            //Update host fish
+            await Fish.findOneAndUpdate(
+                {owner: guestFish.owner, row: guestFish.row, column: guestFish.column},
+                {owner: hostFish.owner, row: hostFish.row, column: hostFish.column}
+            )
+
+            //Update guest fish
+            await Fish.findOneAndUpdate(
+                {owner: hostFish.owner, row: hostFish.row, column: hostFish.column},
+                {owner: guestFish.owner, row: guestFish.row, column: guestFish.column}
+            )
+        }
+        catch(error:any){
+            console.error(`Error while trading between ${hostFish.owner} and ${guestFish.owner}: ` + error.message)
+        }
     }
 }
