@@ -12,6 +12,7 @@ import { Vector2 } from "../interfaces/Vector2";
 import { IFish, ToLootFish } from "../interfaces/Fish";
 import { PickUp } from "../ui/actions/PickUp";
 import { UI } from "../scenes/UI";
+import { Character } from "../objects/Character";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -208,6 +209,10 @@ export class GameNetManager{
 
     static sendMessage(message: string){
         this.room.send("msg", message)
+    }
+
+    static inviteTrade(character:Character){
+        this.room.send("invite trade", character.sessionId)
     }
 
     static disconnect(){

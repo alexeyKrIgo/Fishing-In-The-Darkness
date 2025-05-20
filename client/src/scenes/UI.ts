@@ -4,6 +4,7 @@ import { InventoryUI } from "../ui/inventory/InventoryUI";
 import { Chat } from "../ui/Chat";
 import { Button } from "../ui/buttons/Button";
 import { GameNetManager } from "../managers/GameNetManager";
+import { Invitation } from "../ui/trade/Invitation";
 export class UI extends Scene{
 
     fps:GameObjects.Text
@@ -12,7 +13,8 @@ export class UI extends Scene{
     inventorySlot: GameObjects.Shader
     inventoryIcon: GameObjects.Shader
     logout: Button
-    static chat:Chat 
+    static chat:Chat
+    tradeInvitation: Invitation
 
     constructor(){
         super("UI")
@@ -48,6 +50,7 @@ export class UI extends Scene{
         this.setTint(this.inventorySlot)
 
         UI.chat = new Chat(this)
+        this.tradeInvitation = new Invitation(this, 170, 120)
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{
