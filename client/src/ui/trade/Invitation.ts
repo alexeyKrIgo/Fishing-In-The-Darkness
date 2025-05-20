@@ -18,6 +18,7 @@ export class Invitation{
         this.cancel = new Button(scene, (p:Input.Pointer, x: number, y:number, event:Phaser.Types.Input.EventData)=>{
                     if(p.button === 0){
                         this.cancel.click()
+                        this.changeVisibility(false, "")
                         event.stopPropagation()
                     }}, 1, WOOD_BUTTON.fill, WOOD_BUTTON.stroke, x + 150, y, 100, 40, 12, "CANCEL", this)
         

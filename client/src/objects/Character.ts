@@ -60,6 +60,8 @@ export class Character extends Phaser.GameObjects.Sprite{
         this.tradeOption = new Button(scene, (p:Input.Pointer, x: number, y:number, event:Phaser.Types.Input.EventData)=>{
             if(p.button === 0){
                 this.tradeOption.click()
+                GameNetManager.inviteTrade(this)
+                console.log(this.nickname.text)
                 event.stopPropagation()
             }
         }, 

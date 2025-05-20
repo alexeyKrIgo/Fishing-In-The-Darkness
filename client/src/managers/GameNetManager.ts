@@ -13,6 +13,7 @@ import { IFish, ToLootFish } from "../interfaces/Fish";
 import { PickUp } from "../ui/actions/PickUp";
 import { UI } from "../scenes/UI";
 import { Character } from "../objects/Character";
+import { WB_COMMANDS } from "../utils/WSCommands";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -177,6 +178,13 @@ export class GameNetManager{
         this.room.onMessage("msg", (data:{id:string, message:string})=>{
             UI.chat.writeMessage(data.message)
         })
+
+        this.room.onMessage(WB_COMMANDS.inviteTrade, (sessionId:string)=>{
+            const character = this.scene.characters.get(sessionId)
+            if(character){
+                UI.tradeInvitation.changeVisibility(true, character.nickname.text)
+            }
+        })
     }
 
     /*private static receiveWalk(id: string, direction: Vector2){
@@ -212,7 +220,7 @@ export class GameNetManager{
     }
 
     static inviteTrade(character:Character){
-        this.room.send("invite trade", character.sessionId)
+        this.room.send(WB_COMMANDS.inviteTrade, character.sessionId)
     }
 
     static disconnect(){

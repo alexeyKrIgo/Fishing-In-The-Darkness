@@ -14,7 +14,7 @@ export class UI extends Scene{
     inventoryIcon: GameObjects.Shader
     logout: Button
     static chat:Chat
-    tradeInvitation: Invitation
+    static tradeInvitation: Invitation
 
     constructor(){
         super("UI")
@@ -50,7 +50,8 @@ export class UI extends Scene{
         this.setTint(this.inventorySlot)
 
         UI.chat = new Chat(this)
-        this.tradeInvitation = new Invitation(this, 170, 120)
+        UI.tradeInvitation = new Invitation(this, 170, 120)
+        UI.tradeInvitation.changeVisibility(false, "")
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{
