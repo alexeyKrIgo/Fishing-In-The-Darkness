@@ -4,6 +4,8 @@ import { MyRoom } from "../rooms/MyRoom";
 import { World } from "../worlds/World";
 import { Fish, ToLootFish } from "../interfaces/Fish";
 import { getRandomInt } from "../utils/Maths";
+import { WB_COMMANDS } from "../utils/WSCommands";
+import { TradeInstance } from "../trade/TradeInstance";
 
 export class GameNetManager {
     static room: MyRoom
@@ -41,6 +43,17 @@ export class GameNetManager {
         this.room.onMessage("msg", (client, message: string)=>{
             console.log(message)
             this.room.broadcast("msg", {id: client.sessionId, message: `${world.characters.get(client.sessionId)!.schema.nickName}: ${message}`})
+        })
+
+        this.room.onMessage(WB_COMMANDS.inviteTrade, (client, sessionId:string)=>{
+            const hostCharacter = this.world.characters.get(client.sessionId)
+            const guestCharacter = this.world.characters.get(sessionId)
+
+            if(hostCharacter && !hostCharacter.trading && guestCharacter && !guestCharacter.trading){
+                hostCharacter.trade = new TradeInstance(hostCharacter, guestCharacter)
+                const guestClient = room.clients.find(c =>c.sessionId == sessionId)
+                guestClient?.send(WB_COMMANDS.inviteTrade, client.sessionId)
+            }
         })
     }
 

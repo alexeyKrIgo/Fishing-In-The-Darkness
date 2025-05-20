@@ -6,6 +6,7 @@ import { MyRoom } from "../rooms/MyRoom";
 import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
 import { InventoryDB } from "../interfaces/Inventory";
+import { TradeInstance } from "../trade/TradeInstance";
 
 export class Character{
     dbId: string
@@ -20,6 +21,9 @@ export class Character{
     //Counts fishes baited to generate and unique id for them
     fishesCounter = 0
     inventory: Inventory
+
+    trade: TradeInstance|null
+    trading = false
 
     constructor(room: MyRoom, dbId:string, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[], nickName:string){
 
@@ -38,6 +42,8 @@ export class Character{
         //Generates schema
         this.generateSchema(sessionId, nickName, room)
         this.dbId = dbId
+
+        this.trade = null
     }
 
     generateSchema(sessionId: string, nickName: string, room: MyRoom){

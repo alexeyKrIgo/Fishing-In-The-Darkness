@@ -26,6 +26,7 @@ export class DB{
 
     static async saveUnsavedFishes(fishes: IFish[]){
         const dbFishes: mongoose.Document<unknown, any, any>[] = []
+        console.log(fishes)
         let owner = fishes[0].owner
         fishes.forEach(f =>{
             let fish = new Fish({owner: f.owner, row: f.row, column: f.column, asset: f.asset})
