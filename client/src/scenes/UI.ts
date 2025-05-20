@@ -15,6 +15,7 @@ export class UI extends Scene{
     logout: Button
     static chat:Chat
     static tradeInvitation: Invitation
+    static trading = false
 
     constructor(){
         super("UI")

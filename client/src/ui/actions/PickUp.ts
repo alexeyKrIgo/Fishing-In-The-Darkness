@@ -13,7 +13,7 @@ export class PickUp extends GameObjects.Text{
             fontFamily: 'InTheDarkness, "Goudy Bookletter 1911", Times, serif' ,
             color: "#fbf236",
             fontSize: 5, 
-            resolution:2, 
+            resolution:10, 
         })
         this.visible = false;
         scene.add.existing(this)
