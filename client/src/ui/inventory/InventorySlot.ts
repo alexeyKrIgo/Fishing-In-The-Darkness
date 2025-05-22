@@ -1,6 +1,6 @@
-import { Game, GameObjects, Scene } from "phaser";
+import { GameObjects, Scene } from "phaser";
 import { GENERAL, UI } from "../../utils/AssetsGlobals";
-import { IFish, ToLootFish } from "../../interfaces/Fish";
+import { IFish} from "../../interfaces/Fish";
 import { InventoryUI } from "./InventoryUI";
 import { UI as SUI } from "../../scenes/UI";
 

@@ -57,6 +57,7 @@ export class DB{
         }
         catch(error:any){
             console.error(`Error while trading between ${hostFish.owner} and ${guestFish.owner}: ` + error.message)
+            throw new Error()
         }
     }
 }

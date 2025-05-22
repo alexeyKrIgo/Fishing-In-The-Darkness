@@ -34,7 +34,7 @@ export class PickUp extends GameObjects.Text{
         })
 
         this.fish = fish
-        if(this.fish){
+        if(this.fish && (this.fish as Fish).fishData.owner == GameNetManager.mainPlayer.id){
             this.visible = true
         }
         else

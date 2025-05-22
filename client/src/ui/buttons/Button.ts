@@ -9,12 +9,11 @@ export class Button extends GameObjects.Rectangle{
     baseStrokeColor:number
 
     constructor(scene: Scene, action:Function, brightness:number, baseFillColor:number, baseStrokeColor: number,
-        x: number, y: number, width: number, height: number, fontSize: number, text:string, context: any
+        x: number, y: number, width: number, height: number, fontSize: number, text:string, context: any, inContainer: boolean = false
     ){
         super(scene, x, y, width, height,  baseFillColor)
         this.setOrigin(0,0)
         this.setStrokeStyle(4, baseStrokeColor)
-        this.scene.add.existing(this)
         this.setInteractive()
 
         this.brightness = brightness
@@ -30,7 +29,11 @@ export class Button extends GameObjects.Rectangle{
             "0", { fontFamily: 'InTheDarkness', fontSize: fontSize});
         this.text.setOrigin(0.5, 0.5)
         this.text.setText(text)
-        this.scene.add.existing(this.text)
+
+        if(!inContainer){
+            this.scene.add.existing(this)
+            this.scene.add.existing(this.text)
+        }
     }
 
     addAction(){
