@@ -5,6 +5,8 @@ import { Chat } from "../ui/Chat";
 import { Button } from "../ui/buttons/Button";
 import { GameNetManager } from "../managers/GameNetManager";
 import { Invitation } from "../ui/trade/Invitation";
+import { TradeWindow } from "../ui/trade/TradeWindow";
+import { Character } from "../objects/Character";
 export class UI extends Scene{
 
     fps:GameObjects.Text
@@ -16,6 +18,7 @@ export class UI extends Scene{
     static chat:Chat
     static tradeInvitation: Invitation
     static trading = false
+    tradeWindow: TradeWindow
 
     constructor(){
         super("UI")
@@ -102,5 +105,9 @@ export class UI extends Scene{
 
     update(time:number, delta: number){
         this.fps.setText("FPS:" + (Math.RoundTo(1000/delta)).toString())
+    }
+
+    startTrade(host:Character){
+        this.tradeWindow = new TradeWindow(this, 400, 400, this.miscScale, host)
     }
 }

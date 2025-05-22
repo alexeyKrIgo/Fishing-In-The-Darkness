@@ -182,6 +182,7 @@ export class GameNetManager{
         this.room.onMessage(WB_COMMANDS.inviteTrade, (sessionId:string)=>{
             const character = this.scene.characters.get(sessionId)
             if(character){
+                UI.tradeInvitation.hostCharacter = character
                 UI.tradeInvitation.changeVisibility(true, character.nickname.text)
             }
         })

@@ -1,17 +1,21 @@
 import { GameObjects, Input, Scene } from "phaser";
 import { Button } from "../buttons/Button";
 import { WOOD_BUTTON } from "../../utils/Colors";
+import { Character } from "../../objects/Character";
+import { UI } from "../../scenes/UI";
 
 export class Invitation{
     title: GameObjects.Text
     host: GameObjects.Text
+    hostCharacter: Character
     accept: Button
     cancel: Button
 
     constructor(scene:Scene, x: number, y: number){
         this.accept = new Button(scene, (p:Input.Pointer, x: number, y:number, event:Phaser.Types.Input.EventData)=>{
                     if(p.button === 0){
-                        this.accept.click()
+                        this.accept.click();
+                        (scene.scene.get("UI") as UI).startTrade(this.hostCharacter)
                         event.stopPropagation()
                     }}, 1, WOOD_BUTTON.fill, WOOD_BUTTON.stroke, x, y, 100, 40, 12, "ACCEPT", this)
 

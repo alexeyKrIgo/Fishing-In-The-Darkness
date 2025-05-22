@@ -21,7 +21,7 @@ export class Inventory{
         this.toSaveFishes = []
     }
 
-    async tradeFish(oldFish: Fish, newFish: Fish){
+    tradeFish(oldFish: Fish, newFish: Fish){
         this.inventorySlots[oldFish.row][oldFish.column] = {
             owner: oldFish.owner, 
             row: oldFish.row, 
