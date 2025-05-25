@@ -55,11 +55,11 @@ export class World{
         return {id: id, owner: client.auth._id, asset: statsFish.asset}
     }
 
-    pickUpFish(client: Client, fishId: string){
+    async pickUpFish(client: Client, fishId: string){
         const character = this.characters.get(client.sessionId)
         const fish = this.charactersLoot.get(client.sessionId).get(fishId)!
         if(fish){
-            const pickedFish = character.pickUpFish(client.auth._id, fish)
+            const pickedFish = await character.pickUpFish(client.auth._id, fish)
             if(pickedFish){
                 console.log(`${client.sessionId} got ${pickedFish.asset} at row: ${pickedFish.row} and column: ${pickedFish.column}`)
                 GameNetManager.sendPickUpFish(fish, client)

@@ -73,9 +73,9 @@ export class MyRoom extends Room<MyRoomState> {
     async onLeave(client: Client, consented: boolean) {
 
         //Save captured fishes in the database
-        const character = this.world.characters.get(client.sessionId)
+        /*const character = this.world.characters.get(client.sessionId)
         if(character.inventory.toSaveFishes.length)
-            await DB.saveUnsavedFishes(character.inventory.toSaveFishes)
+            await DB.saveUnsavedFishes(character.inventory.toSaveFishes)*/
 
         //Delete character from room's state and world
         this.state.characters.delete(client.sessionId)

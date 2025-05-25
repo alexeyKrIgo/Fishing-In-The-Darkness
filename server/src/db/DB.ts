@@ -24,9 +24,18 @@ export class DB{
         return fishes
     }
 
+    static async saveFish(fish:IFish){
+        try{
+            let dbFish = new Fish({owner: fish.owner, row: fish.row, column: fish.column, asset: fish.asset})
+            await dbFish.save()
+        }
+        catch(error:any){
+            throw new Error(error.message)
+        }
+    }
+
     static async saveUnsavedFishes(fishes: IFish[]){
         const dbFishes: mongoose.Document<unknown, any, any>[] = []
-        console.log(fishes)
         let owner = fishes[0].owner
         fishes.forEach(f =>{
             let fish = new Fish({owner: f.owner, row: f.row, column: f.column, asset: f.asset})

@@ -7,8 +7,9 @@ import { SCharacter } from "../schemas/characters/SCharacter";
 import { getRandomInt } from "../utils/Maths";
 import { InventoryDB } from "../interfaces/Inventory";
 import { TradeInstance } from "../trade/TradeInstance";
+import { DB } from "../db/DB";
 
-export class Character{
+export class Character {
     dbId: string
     schema: SCharacter
     x: number
@@ -16,26 +17,26 @@ export class Character{
     direction: Vector2
 
     states: ICharacterStates
-    speed = 0.035; 
+    speed = 0.035;
 
     //Counts fishes baited to generate and unique id for them
     fishesCounter = 0
     inventory: Inventory
 
-    trade: TradeInstance|null
+    trade: TradeInstance | null
     trading = false
 
-    constructor(room: MyRoom, dbId:string, sessionId: string, inventoryDB:InventoryDB, fishes: Fish[], nickName:string){
+    constructor(room: MyRoom, dbId: string, sessionId: string, inventoryDB: InventoryDB, fishes: Fish[], nickName: string) {
 
         //Sets position
         this.x = getRandomInt(100, 200)
         this.y = getRandomInt(100, 120)
 
         //Sets direction
-        this.direction= {x: 0, y: 1}
+        this.direction = { x: 0, y: 1 }
 
         //Sets states
-        this.states={idle: true, fishing: false, tryingCatchFish: false}
+        this.states = { idle: true, fishing: false, tryingCatchFish: false }
 
         this.inventory = new Inventory(inventoryDB.size, fishes)
 
@@ -46,7 +47,7 @@ export class Character{
         this.trade = null
     }
 
-    generateSchema(sessionId: string, nickName: string, room: MyRoom){
+    generateSchema(sessionId: string, nickName: string, room: MyRoom) {
         const characterSchema = new SCharacter();
 
         //Sets schema position
@@ -70,11 +71,11 @@ export class Character{
         room.state.characters.set(sessionId, characterSchema)
     }
 
-    update(delta: number, seaLimit: number){
-        if(!this.states.idle && !this.schema.states.fishing){
-            if(this.schema.y + this.speed*this.direction.y*delta < seaLimit){
-                this.schema.x += this.speed*this.direction.x*delta
-                this.schema.y += this.speed*this.direction.y*delta
+    update(delta: number, seaLimit: number) {
+        if (!this.states.idle && !this.schema.states.fishing) {
+            if (this.schema.y + this.speed * this.direction.y * delta < seaLimit) {
+                this.schema.x += this.speed * this.direction.x * delta
+                this.schema.y += this.speed * this.direction.y * delta
             }
             // this.speed = 40;
             // this.x += this.speed*this.direction.x*delta/1000
@@ -82,7 +83,7 @@ export class Character{
         }
     }
 
-    move(direction: Vector2){
+    move(direction: Vector2) {
 
         //Change state
         this.states.idle = false;
@@ -94,13 +95,13 @@ export class Character{
         this.schema.direction.y = this.direction.y
     }
 
-    stopMove(){
+    stopMove() {
         this.states.idle = true;
         this.schema.states.idle = this.states.idle;
     }
 
     //Cast fish rod
-    fish(id:string){
+    fish(id: string) {
         this.states.idle = false
         this.schema.states.idle = false
 
@@ -110,13 +111,13 @@ export class Character{
     }
 
     //Try to catch fish state start
-    tryCatchFish(id: string){
+    tryCatchFish(id: string) {
         this.states.tryingCatchFish = true
         this.schema.states.tryingCatchFish = true
         console.log(`${id} trying to catch the fish`)
     }
 
-    catchFish(id: string){
+    catchFish(id: string) {
         this.states.idle = true
         this.schema.states.idle = true
 
@@ -127,18 +128,25 @@ export class Character{
         this.schema.states.fishing = false
     }
 
-    pickUpFish(owner: string, toSaveFish: ToLootFish):Fish{
-        let fish: Fish|null = null
-        for(let row = 0; row < this.inventory.size; row++){
-            let slotIndex = this.inventory.inventorySlots[row].findIndex(slot => !slot)
-            if(slotIndex !== -1){
-                fish = {owner: owner, row: row, column: slotIndex, asset:toSaveFish.asset, saved: false}
-                this.inventory.inventorySlots[row][slotIndex] = fish
-                this.inventory.toSaveFishes.push(fish)
-                break;
+    async pickUpFish(owner: string, toSaveFish: ToLootFish) {
+        let fish: Fish | null = null
+        try {
+            for (let row = 0; row < this.inventory.size; row++) {
+                let slotIndex = this.inventory.inventorySlots[row].findIndex(slot => !slot)
+                if (slotIndex !== -1) {
+                    fish = { owner: owner, row: row, column: slotIndex, asset: toSaveFish.asset, saved: true }
+                    await DB.saveFish(fish)
+                    this.inventory.inventorySlots[row][slotIndex] = fish
+                    this.inventory.toSaveFishes.push(fish)
+                    return fish
+                }
+                else
+                    return null
             }
         }
-
-        return fish
+        catch(error:any){
+            console.log("Error while saving picked fish: " + error.message)
+            return null
+        }
     }
 }
