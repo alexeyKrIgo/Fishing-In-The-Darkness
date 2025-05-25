@@ -2,6 +2,7 @@ import { Input, Math } from "phaser";
 import { Character } from "../objects/Character";
 import { GameNetManager } from "../managers/GameNetManager";
 import { UI } from "../scenes/UI";
+import { Player } from "../classes/Player";
 
 export class CharacterControls{
     static mouseLeft = false;
@@ -21,6 +22,8 @@ export class CharacterControls{
     static generateCharacterMoveControl(input: Input.InputPlugin, character:Character){
         input.on("pointerdown", (p:Input.Pointer) => {
             if(p.button === 0){
+                Player.selectedPlayer?.tradeOption.changeVisibility(false)
+                Player.selectedPlayer = null
                 UI.chat.input.blur()
                 UI.chat.displayChat.style.overflow = "hidden"
                 this.mouseLeft = true;

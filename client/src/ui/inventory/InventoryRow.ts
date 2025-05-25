@@ -20,7 +20,9 @@ export class InventoryRow extends GameObjects.Container{
         for (let i = 0; i < InventoryRow.size; i++){
             this.inventorySlots.push(new InventorySlot(scene))
             this.add(this.inventorySlots[i].slot)
+            this.add(this.inventorySlots[i].selected)
             this.inventorySlots[i].slot.setPosition(0 + i*InventorySlot.slotWidth + i*InventoryRow.gap, 0)
+            this.inventorySlots[i].selected.setPosition(0 + i*InventorySlot.slotWidth + i*InventoryRow.gap, 0)
         }
     }
 }

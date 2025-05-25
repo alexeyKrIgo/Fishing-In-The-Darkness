@@ -7,7 +7,7 @@ export class Chat{
     input: HTMLInputElement
 
     constructor(scene: Scene){
-        this.dom = scene.add.dom(200, 800).createFromCache("chat")
+        this.dom = scene.add.dom(1400, 800).createFromCache("chat")
         this.displayChat = this.dom.getChildByID("chatbox") as HTMLDivElement
         this.input = this.dom.getChildByID("message") as HTMLInputElement
 

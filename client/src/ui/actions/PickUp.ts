@@ -13,7 +13,7 @@ export class PickUp extends GameObjects.Text{
             fontFamily: 'InTheDarkness, "Goudy Bookletter 1911", Times, serif' ,
             color: "#fbf236",
             fontSize: 5, 
-            resolution:2, 
+            resolution:10, 
         })
         this.visible = false;
         scene.add.existing(this)
@@ -34,14 +34,14 @@ export class PickUp extends GameObjects.Text{
         })
 
         this.fish = fish
-        if(this.fish){
+        if(this.fish && (this.fish as Fish).fishData.owner == GameNetManager.mainPlayer.id){
             this.visible = true
         }
         else
             this.visible = false
 
         this.depth = character.depth + 1000
-        this.setPosition(character.x - 25, character.y - 25)
+        this.setPosition(character.x - 25, character.y - 30)
     }
 
     pickFish(){

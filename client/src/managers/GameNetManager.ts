@@ -12,6 +12,9 @@ import { Vector2 } from "../interfaces/Vector2";
 import { IFish, ToLootFish } from "../interfaces/Fish";
 import { PickUp } from "../ui/actions/PickUp";
 import { UI } from "../scenes/UI";
+import { Character } from "../objects/Character";
+import { WB_COMMANDS } from "../utils/WSCommands";
+import { InventoryUI } from "../ui/inventory/InventoryUI";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -44,6 +47,7 @@ export class GameNetManager{
     static async connect(){
         this.scene.game.scene.add("UI", new UI(), true);
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
+        this.setCommands()
         const userData = await this.colyseusSDK.auth.getUserData()
         const $ = getStateCallbacks(this.room)
 
@@ -51,7 +55,7 @@ export class GameNetManager{
         $(this.room.state).characters.onAdd((character:SCharacter, sessionId:string)=>{
             let characterObject = new Ghost(this.scene, GHOST.ghostIdle, character.x, character.y,
                 new Math.Vector2(character.direction.x, character.direction.y), character.states,
-                character.nickName
+                character.nickName, sessionId
             )
             //Creates main player
             if(sessionId == this.room.sessionId){
@@ -60,6 +64,9 @@ export class GameNetManager{
                 this.mainPlayer.character = characterObject
                 this.mainPlayer.character.pickUp = new PickUp(this.scene)
                 this.scene.createPlayer(characterObject)
+            }
+            else{
+                characterObject.addRightClickOptions()
             }
 
             //Syn on join current states
@@ -88,6 +95,9 @@ export class GameNetManager{
                     characterObject.y = Math.Linear(characterObject.y, character.y, interpolationFactor)
                     characterObject.fishingRod.x = characterObject.x
                     characterObject.fishingRod.y = characterObject.y
+                    
+                    //Sync characters ui
+                    characterObject.updateCharacterUI()
 
                     //Direction sync
                     characterObject.direction = new Math.Vector2(character.direction.x, character.direction.y)
@@ -116,8 +126,6 @@ export class GameNetManager{
                 character?.destroyCharacter()
             })
         })
-        
-        this.setCommands()
     }
 
     private static setCommands(){
@@ -170,6 +178,48 @@ export class GameNetManager{
         this.room.onMessage("msg", (data:{id:string, message:string})=>{
             UI.chat.writeMessage(data.message)
         })
+
+        this.room.onMessage(WB_COMMANDS.inviteTrade, (sessionId:string)=>{
+            const character = this.scene.characters.get(sessionId)
+            if(character && !UI.trading){
+                UI.tradeInvitation.hostCharacter = character
+                UI.tradeInvitation.changeVisibility(true, character)
+            }
+        })
+
+        this.room.onMessage(WB_COMMANDS.acceptTrade, (data:{host:string, guest:string})=>{
+            const host = this.scene.characters.get(data.host)
+            const guest = this.scene.characters.get(data.guest)
+            if(host && guest)
+                (this.scene.scene.get("UI") as UI).startTrade(host, guest)
+        })
+
+        //Select fish
+        this.room.onMessage(WB_COMMANDS.selectFish,  (data:{fish:IFish, sessionId: string})=>{
+            console.log("selected fish")
+            if(data.sessionId == this.room.sessionId){
+                UI.tradeWindow.mainPlayerSlot.setFish(data.fish)
+            }
+            else{
+                UI.tradeWindow.otherPlayerSlot.setFish(data.fish)
+            }
+        })
+
+        //Lock fish
+        this.room.onMessage(WB_COMMANDS.lockFish, (sessionId:string)=>{
+            if(sessionId == this.room.sessionId){
+                UI.tradeWindow.lockLockButton()
+            }
+            UI.tradeWindow.lockSlot(sessionId)
+        })
+
+        //Finish trade
+        this.room.onMessage(WB_COMMANDS.finishTrade, (fish:IFish)=>{
+            InventoryUI.selectedSlot?.addFish(fish)
+            UI.tradeWindow.destroy()
+            UI.tradeInvitation.changeVisibility(false, null)
+            UI.trading = false
+        })
     }
 
     /*private static receiveWalk(id: string, direction: Vector2){
@@ -202,6 +252,26 @@ export class GameNetManager{
 
     static sendMessage(message: string){
         this.room.send("msg", message)
+    }
+
+    static inviteTrade(character:Character){
+        this.room.send(WB_COMMANDS.inviteTrade, character.sessionId)
+    }
+
+    static acceptTrade(character:Character){
+        this.room.send(WB_COMMANDS.acceptTrade, character.sessionId)
+    }
+
+    static selectFish(fish:IFish, host: Character, guest: Character){
+        this.room.send(WB_COMMANDS.selectFish, {fish:fish, hostId:host.sessionId, clientId:guest.sessionId})
+    }
+
+    static lockFish(host: Character, guest: Character){
+        this.room.send(WB_COMMANDS.lockFish, {guest: guest.sessionId, host:host.sessionId})
+    }
+
+    static finishTrade(host:Character, guest:Character){
+        this.room.send(WB_COMMANDS.finishTrade, {guest: guest.sessionId, host: host.sessionId})
     }
 
     static disconnect(){

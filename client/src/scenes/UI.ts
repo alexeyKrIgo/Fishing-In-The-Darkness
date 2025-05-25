@@ -4,6 +4,9 @@ import { InventoryUI } from "../ui/inventory/InventoryUI";
 import { Chat } from "../ui/Chat";
 import { Button } from "../ui/buttons/Button";
 import { GameNetManager } from "../managers/GameNetManager";
+import { Invitation } from "../ui/trade/Invitation";
+import { TradeWindow } from "../ui/trade/TradeWindow";
+import { Character } from "../objects/Character";
 export class UI extends Scene{
 
     fps:GameObjects.Text
@@ -12,7 +15,10 @@ export class UI extends Scene{
     inventorySlot: GameObjects.Shader
     inventoryIcon: GameObjects.Shader
     logout: Button
-    static chat:Chat 
+    static chat:Chat
+    static tradeInvitation: Invitation
+    static trading = false
+    static tradeWindow: TradeWindow
 
     constructor(){
         super("UI")
@@ -39,7 +45,7 @@ export class UI extends Scene{
         )
 
         //Generate logout button
-        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 150, 60, 20, "Logout", null);
+        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 4, 150, 60, 20, "Logout", null);
 
         //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)
@@ -48,6 +54,8 @@ export class UI extends Scene{
         this.setTint(this.inventorySlot)
 
         UI.chat = new Chat(this)
+        UI.tradeInvitation = new Invitation(this, 170, 120)
+        UI.tradeInvitation.changeVisibility(false, null)
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{
@@ -75,21 +83,21 @@ export class UI extends Scene{
         }, this)
 
         image.on("pointerdown", (pointer:Input.Pointer)=>{
-            if(pointer.button === 0){
+            if(pointer.button == 0){
                 this.inventorySlot.setUniform("brightness.value", 0.6);
                 this.inventoryIcon.setUniform("brightness.value", 0.6);
                 this.inventoryIcon!.scene.time.addEvent({
                     delay: 100,
                     callbackScope: this,
                     callback: ()=>{
-                        this.inventoryIcon.setUniform("brightness.value", 1);
+                        this.inventoryIcon.setUniform("brightness.value", 1.2);
                         UI.inventoryUI.inventoryRows.forEach(r => r.setVisible(!r.visible))
                     }
                 })
                 this.inventorySlot.scene.time.addEvent({
                     delay: 100,
                     callbackScope: this,
-                    callback: ()=>this.inventorySlot.setUniform("brightness.value", 1)
+                    callback: ()=>this.inventorySlot.setUniform("brightness.value", 1.2)
                 })
             }
         }, this)
@@ -97,5 +105,14 @@ export class UI extends Scene{
 
     update(time:number, delta: number){
         this.fps.setText("FPS:" + (Math.RoundTo(1000/delta)).toString())
+    }
+
+    startTrade(host:Character, guest:Character){
+        UI.tradeWindow = new TradeWindow(this, 200, 600, this.miscScale, host, guest)
+        UI.trading = true
+    }
+
+    static destroyTrade(){
+        this.tradeWindow.destroy()
     }
 }

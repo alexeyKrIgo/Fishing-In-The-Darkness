@@ -30,7 +30,7 @@ export class World{
             const fishingInterval = setInterval(()=>{
                 if(getRandomInt(1,100) <= 10){
                     const fish:ToLootFish = this.generateFish(client, character)
-                    console.log(`${client.auth.id} bited ${fish.id} with asset ${fish.asset}`)
+                    console.log(`${client.auth._id} bited ${fish.id} with asset ${fish.asset}`)
                     this.charactersLoot.get(client.sessionId)?.set(fish.id, fish)
                     GameNetManager.sendBait(client, fish)
                     clearInterval(fishingInterval)

@@ -45,7 +45,6 @@ export class Game extends Scene {
         /*this.testTween = this.tweens.add({targets: this.character, props: {
             scale: {value: 2, duration: 3000}
         }})*/
-        
     }
 
     createPlayer(character: Character){
@@ -53,6 +52,12 @@ export class Game extends Scene {
         this.cameras.main.centerOn(character.x, character.y)
         this.cameras.main.startFollow(character)
         this.cameras.main.setBounds(0,0, 560, 240)
+
+        const canvas = this.sys.game.canvas;
+
+        canvas.addEventListener('contextmenu', (event) => {
+            event.preventDefault();
+        });
 
         CharacterControls.generateCharacterMoveControl(this.input, character)
         CharacterControls.generateKeys(this.input)
