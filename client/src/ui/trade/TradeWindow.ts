@@ -9,7 +9,10 @@ import { InventoryUI } from "../inventory/InventoryUI";
 
 export class TradeWindow extends GameObjects.Container {
     host: Character
+    hostLocked = false
     guest: Character
+    guestLocked = false
+
     mainNickname: GameObjects.Text
     otherNickname: GameObjects.Text
 
@@ -48,7 +51,7 @@ export class TradeWindow extends GameObjects.Container {
             GameNetManager.mainPlayer.character.nickname.text, { fontFamily: 'InTheDarkness', fontSize: 5, resolution: 10 })
         this.mainNickname.setOrigin(0.5, 0.5)
         this.otherNickname = new GameObjects.Text(scene, this.otherPlayerSlotPosition.x, this.otherPlayerSlotPosition.y - 30,
-            host == GameNetManager.mainPlayer.character?guest.nickname.text: host.nickname.text, 
+            host == GameNetManager.mainPlayer.character ? guest.nickname.text : host.nickname.text,
             { fontFamily: 'InTheDarkness', fontSize: 5, resolution: 10 }
         )
         this.otherNickname.setOrigin(0.5, 0.5);
@@ -58,7 +61,7 @@ export class TradeWindow extends GameObjects.Container {
         //Buttons Generation
         this.lockButton = new Button(scene, (p: Input.Pointer, x: number, y: number, event: Phaser.Types.Input.EventData) => {
             if (!this.locked && InventoryUI.selectedSlot) {
-                //GameNetManager.lockFish(InventoryUI.selectedSlot.fish, this.host,)
+                GameNetManager.lockFish(this.host, this.guest)
 
                 //Enable accept button
                 /*this.acceptButton.changeBrightness(1)
@@ -70,7 +73,8 @@ export class TradeWindow extends GameObjects.Container {
 
         this.acceptButton = new Button(scene, (p: Input.Pointer, x: number, y: number, event: Phaser.Types.Input.EventData) => {
             if (this.locked) {
-
+                this.acceptButton.click()
+                GameNetManager.finishTrade(this.host, this.guest)
             }
             event.stopPropagation()
         }, 0.6, WOOD_BUTTON.fill, WOOD_BUTTON.stroke, 1, this.accpetButtonX, this.acceptButtonY, 53, 12, 7, "TRADE", this, true)
@@ -86,7 +90,31 @@ export class TradeWindow extends GameObjects.Container {
         this.lockButton.locked = true
         this.lockButton.changeBrightness(0.6);
         this.lockButton.text.setTint(0x5a5a5a);
-        (this.mainPlayerSlot.slot as GameObjects.Image).setTint(0x5a5a5a);
-        (this.mainPlayerSlot.icon as GameObjects.Image).setTint(0x5a5a5a)
+    }
+
+    lockSlot(sessionId: string) {
+        if (sessionId == GameNetManager.room.sessionId) {
+            (this.mainPlayerSlot.slot as GameObjects.Image).setTint(0x5a5a5a);
+            (this.mainPlayerSlot.icon as GameObjects.Image).setTint(0x5a5a5a)
+            this.locked = true
+        }
+        else {
+            (this.otherPlayerSlot.slot as GameObjects.Image).setTint(0x5a5a5a);
+            (this.otherPlayerSlot.icon as GameObjects.Image).setTint(0x5a5a5a)
+        }
+
+        if (this.host.sessionId == sessionId) {
+            this.hostLocked = true
+        }
+        else if (this.guest.sessionId == sessionId) {
+            this.guestLocked = true
+        }
+
+        //Activate the acceptButton button
+        if (this.guestLocked && this.hostLocked) {
+            this.acceptButton.changeBrightness(1)
+            this.acceptButton.text.clearTint()
+            this.acceptButton.locked = false
+        }
     }
 }

@@ -15,5 +15,6 @@ export const WB_COMMANDS = {
     inviteTrade: "invite trade",
     acceptTrade: "accept trade",
     selectFish: "select fish",
-    lockFish: "lock fish"
+    lockFish: "lock fish",
+    finishTrade: "finish trade"
 }

@@ -18,16 +18,17 @@ export class TradeInstance {
         this.guest = guest
     }
 
-    lockHost(fish: Fish) {
+    /*lockHost(fish: Fish) {
         this.hostItem = fish
     }
 
     lockGuest(fish: Fish) {
         this.guestItem = fish
-    }
+    }*/
 
     async makeTrade() {
         if (this.hostItem && this.hostAccepted && this.guestItem && this.guestAccepted) {
+            console.log(`starting trade between ${this.host.dbId} and ${this.guest.dbId}`)
             try {
                 await DB.tradeFishes(this.hostItem, this.guestItem)
                 this.host.inventory.tradeFish(this.hostItem, this.guestItem)

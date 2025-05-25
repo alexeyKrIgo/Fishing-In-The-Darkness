@@ -14,6 +14,7 @@ import { PickUp } from "../ui/actions/PickUp";
 import { UI } from "../scenes/UI";
 import { Character } from "../objects/Character";
 import { WB_COMMANDS } from "../utils/WSCommands";
+import { InventoryUI } from "../ui/inventory/InventoryUI";
 
 export class GameNetManager{
     static mainPlayer = new Player()
@@ -205,6 +206,20 @@ export class GameNetManager{
         })
 
         //Lock fish
+        this.room.onMessage(WB_COMMANDS.lockFish, (sessionId:string)=>{
+            if(sessionId == this.room.sessionId){
+                UI.tradeWindow.lockLockButton()
+            }
+            UI.tradeWindow.lockSlot(sessionId)
+        })
+
+        //Finish trade
+        this.room.onMessage(WB_COMMANDS.finishTrade, (fish:IFish)=>{
+            InventoryUI.selectedSlot?.addFish(fish)
+            UI.tradeWindow.destroy()
+            UI.tradeInvitation.changeVisibility(false, null)
+            UI.trading = false
+        })
     }
 
     /*private static receiveWalk(id: string, direction: Vector2){
@@ -252,7 +267,11 @@ export class GameNetManager{
     }
 
     static lockFish(host: Character, guest: Character){
-        
+        this.room.send(WB_COMMANDS.lockFish, {guest: guest.sessionId, host:host.sessionId})
+    }
+
+    static finishTrade(host:Character, guest:Character){
+        this.room.send(WB_COMMANDS.finishTrade, {guest: guest.sessionId, host: host.sessionId})
     }
 
     static disconnect(){

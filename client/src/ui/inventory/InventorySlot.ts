@@ -42,6 +42,7 @@ export class InventorySlot {
 
     addFish(fishData: IFish) {
         this.fish = fishData
+        this.icon?.destroy()
         this.icon = new GameObjects.Image(this.slot.scene, this.slot.x, this.slot.y, GENERAL.loot, fishData.asset)
         this.icon.setOrigin(0, 0)
         this.slot.parentContainer.add(this.icon)
