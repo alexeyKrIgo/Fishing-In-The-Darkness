@@ -18,7 +18,7 @@ export class UI extends Scene{
     static chat:Chat
     static tradeInvitation: Invitation
     static trading = false
-    tradeWindow: TradeWindow
+    static tradeWindow: TradeWindow
 
     constructor(){
         super("UI")
@@ -45,7 +45,7 @@ export class UI extends Scene{
         )
 
         //Generate logout button
-        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 150, 60, 20, "Logout", null);
+        this.logout = new Button(this, GameNetManager.disconnect, 1, 0x73442f, 0xb06948, 4, 4, 4, 150, 60, 20, "Logout", null);
 
         //Generate inventory open/close controls
         this.inventorySlot = this.makeShader(UIGlobals.brightness, UIGlobals.inventorySlot)
@@ -55,7 +55,7 @@ export class UI extends Scene{
 
         UI.chat = new Chat(this)
         UI.tradeInvitation = new Invitation(this, 170, 120)
-        UI.tradeInvitation.changeVisibility(false, "")
+        UI.tradeInvitation.changeVisibility(false, null)
     }
 
     makeShader(shaderKey: string, texture: string):GameObjects.Shader{
@@ -107,7 +107,12 @@ export class UI extends Scene{
         this.fps.setText("FPS:" + (Math.RoundTo(1000/delta)).toString())
     }
 
-    startTrade(host:Character){
-        this.tradeWindow = new TradeWindow(this, 400, 400, this.miscScale, host)
+    startTrade(host:Character, guest:Character){
+        UI.tradeWindow = new TradeWindow(this, 200, 600, this.miscScale, host, guest)
+        UI.trading = true
+    }
+
+    static destroyTrade(){
+        this.tradeWindow.destroy()
     }
 }

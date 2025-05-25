@@ -13,7 +13,6 @@ export class FormButton extends Button{
     }
 
     addAction(): void {
-        console.log("hello")
         if(this.active){
             this.action()
         }

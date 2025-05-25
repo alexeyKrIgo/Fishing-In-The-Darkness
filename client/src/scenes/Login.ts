@@ -56,18 +56,18 @@ export class Login extends Scene{
             }
 
             //Generate button for login
-            this.loginButton = new FormButton(this, this.login, 1,  0x73442f, 0xb06948, 830, 620, 200, 60, 30, "LOGIN", this)
+            this.loginButton = new FormButton(this, this.login, 1,  0x73442f, 0xb06948, 4, 830, 620, 200, 60, 30, "LOGIN", this)
 
             //Generate button for swap to register
-            this.swapToRegisterButton = new FormButton(this, this.swapToRegister, 1,  0x73442f, 0xb06948, 870, 730, 110, 60, 13, "REGISTER", this)
+            this.swapToRegisterButton = new FormButton(this, this.swapToRegister, 1,  0x73442f, 0xb06948, 4, 870, 730, 110, 60, 13, "REGISTER", this)
 
             //Generate button for register
-            this.registerButton = new FormButton(this, this.register, 1,  0x73442f, 0xb06948, 800, 750, 260, 60, 30, "REGISTER", this)
+            this.registerButton = new FormButton(this, this.register, 1,  0x73442f, 0xb06948, 4, 800, 750, 260, 60, 30, "REGISTER", this)
             this.registerButton.visible = false
             this.registerButton.text.visible = false
 
             //Generate button for swap to login
-            this.swapToLoginButton = new FormButton(this, this.swapToLogin, 1,  0x73442f, 0xb06948, 870, 850, 110, 60, 13, "LOGIN", this)
+            this.swapToLoginButton = new FormButton(this, this.swapToLogin, 1,  0x73442f, 0xb06948, 4, 870, 850, 110, 60, 13, "LOGIN", this)
             this.swapToLoginButton.visible = false;
             this.swapToLoginButton.text.visible = false
         }

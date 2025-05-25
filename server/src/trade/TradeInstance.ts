@@ -7,10 +7,14 @@ export class TradeInstance {
     guest: Character
     hostItem: Fish
     hostAccepted = false
+    hostLocked = false
     guestItem: Fish
     guestAccepted = false
+    guestLocked = false
+    inTrade = false
 
     constructor(host: Character, guest: Character) {
+        this.host = host
         this.guest = guest
     }
 

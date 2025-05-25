@@ -7,13 +7,16 @@ export class Button extends GameObjects.Rectangle{
     brightness:number
     baseFillColor:number
     baseStrokeColor:number
+    strokeWidth: number
+    locked = false
 
-    constructor(scene: Scene, action:Function, brightness:number, baseFillColor:number, baseStrokeColor: number,
+    constructor(scene: Scene, action:Function, brightness:number, baseFillColor:number, baseStrokeColor: number, strokeWidth: number,
         x: number, y: number, width: number, height: number, fontSize: number, text:string, context: any, inContainer: boolean = false
     ){
         super(scene, x, y, width, height,  baseFillColor)
+        this.strokeWidth = strokeWidth
         this.setOrigin(0,0)
-        this.setStrokeStyle(4, baseStrokeColor)
+        this.setStrokeStyle(strokeWidth, baseStrokeColor)
         this.setInteractive()
 
         this.brightness = brightness
@@ -21,12 +24,21 @@ export class Button extends GameObjects.Rectangle{
         this.baseStrokeColor = baseStrokeColor
         this.action = action
 
-        this.on("pointerover", ()=>this.changeBrightness(1.2), this)
-        this.on("pointerout", ()=>this.changeBrightness(1), this)
         this.on("pointerdown", action, context)
+        this.on("pointerover", ()=>{
+            if(!this.locked)
+                this.changeBrightness(1.2)
+        }, this)
+        this.on("pointerout", ()=>
+            {   
+                if(!this.locked){
+                    this.changeBrightness(1)
+                }
+            }, 
+        this)
 
         this.text = new GameObjects.Text(this.scene, this.x + this.width/2, this.y + this.height/2, 
-            "0", { fontFamily: 'InTheDarkness', fontSize: fontSize});
+            "0", { fontFamily: 'InTheDarkness', fontSize: fontSize, resolution: 10});
         this.text.setOrigin(0.5, 0.5)
         this.text.setText(text)
 
@@ -34,6 +46,8 @@ export class Button extends GameObjects.Rectangle{
             this.scene.add.existing(this)
             this.scene.add.existing(this.text)
         }
+
+        this.changeBrightness(brightness)
     }
 
     addAction(){
@@ -42,12 +56,17 @@ export class Button extends GameObjects.Rectangle{
 
     click(){
         this.changeBrightness(0.8)
-        this.scene.time.addEvent({delay: 100, callbackScope: this, callback: ()=>this.changeBrightness(1.2)})
+        this.scene.time.addEvent({
+            delay: 100, callbackScope: this, callback: 
+            ()=>{
+                this.changeBrightness(1.2)
+            },
+        })
     }
 
     changeBrightness(brightness: number){
         this.setFillStyle(this.getBirghtenedColor(this.baseFillColor, brightness))
-        this.setStrokeStyle(4, this.getBirghtenedColor(this.baseStrokeColor, brightness))
+        this.setStrokeStyle(this.strokeWidth, this.getBirghtenedColor(this.baseStrokeColor, brightness))
     }
 
     getBirghtenedColor(color: number, brightness: number): number{

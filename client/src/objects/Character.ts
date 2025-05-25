@@ -65,7 +65,7 @@ export class Character extends Phaser.GameObjects.Sprite{
                 event.stopPropagation()
             }
         }, 
-            1, WOOD_BUTTON.fill, WOOD_BUTTON.stroke, this.x, this.y, 100, 30, 15, "TRADE", null)
+            1, WOOD_BUTTON.fill, WOOD_BUTTON.stroke, 4, this.x, this.y, 100, 30, 15, "TRADE", null)
         this.tradeOption.scale = 0.2
         this.tradeOption.setOrigin(0.5, 0.5)
         this.tradeOption.text.scale = 0.2

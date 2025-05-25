@@ -45,6 +45,7 @@ export class GameNetManager {
             this.room.broadcast("msg", {id: client.sessionId, message: `${world.characters.get(client.sessionId)!.schema.nickName}: ${message}`})
         })
 
+        //Receive invitation to trade
         this.room.onMessage(WB_COMMANDS.inviteTrade, (client, sessionId:string)=>{
             const hostCharacter = this.world.characters.get(client.sessionId)
             const guestCharacter = this.world.characters.get(sessionId)
@@ -53,6 +54,61 @@ export class GameNetManager {
                 hostCharacter.trade = new TradeInstance(hostCharacter, guestCharacter)
                 const guestClient = room.clients.find(c =>c.sessionId == sessionId)
                 guestClient?.send(WB_COMMANDS.inviteTrade, client.sessionId)
+            }
+        })
+
+        //Invitation accepted
+        this.room.onMessage(WB_COMMANDS.acceptTrade, (client, sessionId: string)=>{
+            const host = this.world.characters.get(sessionId)
+            const guest = this.world.characters.get(client.sessionId)
+            if(guest == host.trade.guest){
+                host.trading = true
+                guest.trading = true
+                const hostClient = room.clients.find(c =>c.sessionId == sessionId)
+                hostClient?.send(WB_COMMANDS.acceptTrade, {host: sessionId, guest: client.sessionId})
+                client.send(WB_COMMANDS.acceptTrade, {host: sessionId, guest: client.sessionId})
+            }
+        })
+
+        //SelectFish
+        this.room.onMessage(WB_COMMANDS.selectFish, (client, data:{fish:Fish, hostId:string, clientId:string})=>{
+            const host = this.world.characters.get(data.hostId)
+            const character = this.world.characters.get(client.sessionId)
+            console.log(data.hostId)
+            if(host){
+                //For host
+                if(character == host.trade.host){
+                    host.trade.hostItem = data.fish
+                    const guestClient = room.clients.find(c =>c.sessionId == data.clientId)
+                    client.send(WB_COMMANDS.selectFish, {fish: data.fish, sessionId: data.hostId})
+                    guestClient.send(WB_COMMANDS.selectFish, {fish: data.fish, sessionId: data.hostId})
+                }
+                //For guest
+                else if(character == host.trade.guest){
+                    host.trade.guestItem = data.fish
+                    const hostClient = room.clients.find(c =>c.sessionId == data.hostId)
+                    client.send(WB_COMMANDS.selectFish, {fish: data.fish, sessionId: data.clientId})
+                    hostClient.send(WB_COMMANDS.selectFish, {fish: data.fish, sessionId: data.clientId})
+                }
+            }
+        })
+
+        //LockFish
+        this.room.onMessage(WB_COMMANDS.lockFish, (client, data:{guest: string, host:string})=>{
+            const guest = this.world.characters.get(data.guest)
+            const host = this.world.characters.get(data.host)
+            const hostClient = room.clients.find(c =>c.sessionId == data.host)
+            const guestClient = room.clients.find(c=> c.sessionId == data.guest)
+
+            if(client.sessionId = data.host){
+                host.trade.hostLocked = true
+                hostClient.send(WB_COMMANDS.lockFish, data.host)
+                guestClient.send(WB_COMMANDS.lockFish, data.host)
+            }
+            else if (client.sessionId = data.guest){
+                host.trade.guestLocked = true
+                 hostClient.send(WB_COMMANDS.lockFish, data.guest)
+                guestClient.send(WB_COMMANDS.lockFish, data.guest)
             }
         })
     }

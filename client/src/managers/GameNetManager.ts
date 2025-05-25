@@ -46,6 +46,7 @@ export class GameNetManager{
     static async connect(){
         this.scene.game.scene.add("UI", new UI(), true);
         this.room = await this.colyseusSDK.join<MyRoomState>("my_room")
+        this.setCommands()
         const userData = await this.colyseusSDK.auth.getUserData()
         const $ = getStateCallbacks(this.room)
 
@@ -124,8 +125,6 @@ export class GameNetManager{
                 character?.destroyCharacter()
             })
         })
-        
-        this.setCommands()
     }
 
     private static setCommands(){
@@ -181,11 +180,31 @@ export class GameNetManager{
 
         this.room.onMessage(WB_COMMANDS.inviteTrade, (sessionId:string)=>{
             const character = this.scene.characters.get(sessionId)
-            if(character){
+            if(character && !UI.trading){
                 UI.tradeInvitation.hostCharacter = character
-                UI.tradeInvitation.changeVisibility(true, character.nickname.text)
+                UI.tradeInvitation.changeVisibility(true, character)
             }
         })
+
+        this.room.onMessage(WB_COMMANDS.acceptTrade, (data:{host:string, guest:string})=>{
+            const host = this.scene.characters.get(data.host)
+            const guest = this.scene.characters.get(data.guest)
+            if(host && guest)
+                (this.scene.scene.get("UI") as UI).startTrade(host, guest)
+        })
+
+        //Select fish
+        this.room.onMessage(WB_COMMANDS.selectFish,  (data:{fish:IFish, sessionId: string})=>{
+            console.log("selected fish")
+            if(data.sessionId == this.room.sessionId){
+                UI.tradeWindow.mainPlayerSlot.setFish(data.fish)
+            }
+            else{
+                UI.tradeWindow.otherPlayerSlot.setFish(data.fish)
+            }
+        })
+
+        //Lock fish
     }
 
     /*private static receiveWalk(id: string, direction: Vector2){
@@ -222,6 +241,18 @@ export class GameNetManager{
 
     static inviteTrade(character:Character){
         this.room.send(WB_COMMANDS.inviteTrade, character.sessionId)
+    }
+
+    static acceptTrade(character:Character){
+        this.room.send(WB_COMMANDS.acceptTrade, character.sessionId)
+    }
+
+    static selectFish(fish:IFish, host: Character, guest: Character){
+        this.room.send(WB_COMMANDS.selectFish, {fish:fish, hostId:host.sessionId, clientId:guest.sessionId})
+    }
+
+    static lockFish(host: Character, guest: Character){
+        
     }
 
     static disconnect(){
