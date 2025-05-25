@@ -34,6 +34,22 @@ export class DB{
         }
     }
 
+    static async deleteFish(fish: IFish){
+        try{
+            const result = await Fish.findOneAndDelete({owner: fish.owner, row: fish.row, column: fish.column, asset: fish.asset})
+            if(result){
+                return fish
+            }
+            else{
+                return null
+            }
+        }
+        catch(error: any){
+            throw new Error("Error while deleting fish: " + error.message)
+        }
+        //ADD DELETE ALSO IN THE BACKEND INVENTORY OBJECT
+    }
+
     static async saveUnsavedFishes(fishes: IFish[]){
         const dbFishes: mongoose.Document<unknown, any, any>[] = []
         let owner = fishes[0].owner

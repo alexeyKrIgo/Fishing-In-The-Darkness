@@ -29,4 +29,11 @@ export class InventoryUI{
     addFish(fishData: IFish){
         this.inventoryRows.get(fishData.row)?.inventorySlots[fishData.column].addFish(fishData)
     }
+
+    static destroyDeleteOption(){
+        if(this.selectedSlot){
+            this.selectedSlot?.delete?.destroyButton()
+            this.selectedSlot.selected.visible = false
+        }
+    }
 }
