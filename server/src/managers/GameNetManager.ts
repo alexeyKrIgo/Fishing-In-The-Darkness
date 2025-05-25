@@ -6,6 +6,7 @@ import { Fish, ToLootFish } from "../interfaces/Fish";
 import { getRandomInt } from "../utils/Maths";
 import { WB_COMMANDS } from "../utils/WSCommands";
 import { TradeInstance } from "../trade/TradeInstance";
+import { DB } from "../db/DB";
 
 export class GameNetManager {
     static room: MyRoom
@@ -37,6 +38,13 @@ export class GameNetManager {
 
         this.room.onMessage("pf", (client, data: ToLootFish) => {
             this.world.pickUpFish(client, data.id)
+        })
+
+        this.room.onMessage("df", async (client, fish:Fish)=>{
+            const deletedFish = await DB.deleteFish(fish)
+            if(deletedFish){
+                client.send("df", deletedFish)
+            }
         })
 
         //Receive players message

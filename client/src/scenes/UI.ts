@@ -92,6 +92,7 @@ export class UI extends Scene{
                     callback: ()=>{
                         this.inventoryIcon.setUniform("brightness.value", 1.2);
                         UI.inventoryUI.inventoryRows.forEach(r => r.setVisible(!r.visible))
+                        InventoryUI.destroyDeleteOption()
                     }
                 })
                 this.inventorySlot.scene.time.addEvent({

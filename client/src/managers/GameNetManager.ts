@@ -175,6 +175,10 @@ export class GameNetManager{
             UI.inventoryUI.addFish(fish)
         })
 
+        this.room.onMessage("df", (fish: IFish)=>{
+            UI.inventoryUI.inventoryRows.get(fish.row)!.inventorySlots[fish.column]!.deleteFish()
+        })
+
         this.room.onMessage("msg", (data:{id:string, message:string})=>{
             UI.chat.writeMessage(data.message)
         })
@@ -248,6 +252,10 @@ export class GameNetManager{
 
     static sendPickUpFish(fish: ToLootFish){
         this.room.send("pf", fish)
+    }
+
+    static deleteFish(fish: IFish){
+        this.room.send("df", fish)
     }
 
     static sendMessage(message: string){
