@@ -23,6 +23,7 @@ export class Inventory{
 
     tradeFish(oldFish: Fish, newFish: Fish){
         this.inventorySlots[oldFish.row][oldFish.column] = {
+            _id: newFish._id,
             owner: oldFish.owner, 
             row: oldFish.row, 
             column: oldFish.column, 

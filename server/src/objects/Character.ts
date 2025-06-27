@@ -134,15 +134,15 @@ export class Character {
             for (let row = 0; row < this.inventory.size; row++) {
                 let slotIndex = this.inventory.inventorySlots[row].findIndex(slot => !slot)
                 if (slotIndex !== -1) {
-                    fish = { owner: owner, row: row, column: slotIndex, asset: toSaveFish.asset, saved: true }
-                    await DB.saveFish(fish)
+                    fish = {_id:undefined, owner: owner, row: row, column: slotIndex, asset: toSaveFish.asset, saved: true }
+                    const id = await DB.saveFish(fish)
+                    fish._id = id.toString()
                     this.inventory.inventorySlots[row][slotIndex] = fish
                     this.inventory.toSaveFishes.push(fish)
                     return fish
                 }
-                else
-                    return null
             }
+            return null
         }
         catch(error:any){
             console.log("Error while saving picked fish: " + error.message)

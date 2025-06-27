@@ -27,7 +27,8 @@ export class DB{
     static async saveFish(fish:IFish){
         try{
             let dbFish = new Fish({owner: fish.owner, row: fish.row, column: fish.column, asset: fish.asset})
-            await dbFish.save()
+            const returnFish = await dbFish.save()
+            return returnFish._id
         }
         catch(error:any){
             throw new Error(error.message)
@@ -70,13 +71,13 @@ export class DB{
         try{
             //Update host fish
             await Fish.findOneAndUpdate(
-                {owner: guestFish.owner, row: guestFish.row, column: guestFish.column},
+                {_id: guestFish._id},
                 {owner: hostFish.owner, row: hostFish.row, column: hostFish.column}
             )
 
             //Update guest fish
             await Fish.findOneAndUpdate(
-                {owner: hostFish.owner, row: hostFish.row, column: hostFish.column},
+                {_id: hostFish._id},
                 {owner: guestFish.owner, row: guestFish.row, column: guestFish.column}
             )
         }

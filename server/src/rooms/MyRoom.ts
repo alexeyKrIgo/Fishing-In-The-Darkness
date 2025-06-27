@@ -57,7 +57,7 @@ export class MyRoom extends Room<MyRoomState> {
             sfish.owner = f.owner.toString()
             sfish.row = f.row
             sfish.column = f.column
-            savedFishes.push({owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset, saved: true})
+            savedFishes.push({_id:f._id.toString(), owner: f.owner.toString(), row: f.row, column: f.column, asset: f.asset, saved: true})
         })
 
         //generates character

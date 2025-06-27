@@ -1,4 +1,5 @@
 export interface Fish{
+    _id: string|undefined,
     owner: string,
     row: number,
     column: number

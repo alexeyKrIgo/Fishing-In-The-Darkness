@@ -39,7 +39,8 @@ export class InventorySlot {
                 if (p.button == 2 && this.icon) {
                     if (InventoryUI.selectedSlot) {
                         InventoryUI.selectedSlot.selected.visible = false;
-                        (InventoryUI.selectedSlot.delete as Button).destroyButton()
+                        if(InventoryUI.selectedSlot.delete)
+                            (InventoryUI.selectedSlot.delete as Button).destroyButton()
                     }
 
                     InventoryUI.selectedSlot = this
